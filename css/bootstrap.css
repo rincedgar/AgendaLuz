@@ -83,6 +83,7 @@ sup {
 sub {
   bottom: -0.25em;
 }
+
 img {
   max-width: 100%;
   vertical-align: middle;
@@ -2612,13 +2613,15 @@ input[type="submit"].btn.btn-mini {
   cursor: default;
 }
 .nav-pills > li > a {
+  text-align: center;
   padding-top: 8px;
   padding-bottom: 8px;
   margin-top: 2px;
-  margin-bottom: 2px;
+
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  min-width: 100px;
 }
 .nav-pills > .active > a,
 .nav-pills > .active > a:hover {

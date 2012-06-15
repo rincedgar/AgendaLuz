@@ -1,159 +1,70 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Boceto de Agendas</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+	<head>
+		<meta charset="utf-8">
+		<title>Boceto de Agendas</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Sistema de Agendas LUZ">
+		<meta name="author" content="Edgar Rincon">
 
-    <!-- styles -->
-    <link href="./css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-    <link href="./css/bootstrap-responsive.css" rel="stylesheet">
+		<!-- Estilos -->
+		<link href="./css/bootstrap.css" rel="stylesheet">
 
+		<link href="./css/bootstrap-responsive.css" rel="stylesheet">
 
-  </head>
+	</head>
 
-  <body style="margin-top:auto;margin-bottom:0">
-	<!-- Barra Navegacion ================================================== -->
-    <div class="navbar navbar-fixed-top hidden-desktop" style="position:fixed;">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="#">Sistema de Agendas de F.E.C.</a>
-		  <div class="btn-group pull-right">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="icon-user"></i> Usuario
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Opciones</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Salir</a></li>
-            </ul>
-          </div>
-		<form class="navbar-search pull-right">
-			<input type="text" class="search-query" placeholder="Search">
-		</form>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Cabecera ================================================== -->
-	<header style="text-align: center">
-		<div class="container">
-			<div class="row">		
-				<div class="span3"><img src="./img/logo_luz.png" alt="Logo Luz"/></div>
-				<div class="span9">
-					<h1 style="color:#00539F"> Sistema de Agendas</h1><br />
-					<h1 style="color:#00539F"> Facultad Experimental de Ciencias</h1> 
+	<body  style="margin-top:50px; margin-bottom:0px;">
+		<!-- CUERPO ================================================== -->
+		<div class="container" id="cuerpo">
+			<!-- CABECERA ================================================== -->
+			<header style="text-align: center;">
+				<div class="row span12 hidden-desktop" style=" margin-top: 100px"></div>
+				<div class="container">
+					<div class="row-fluid">
+						<div class="span3"><img src="./img/logo_luz.png" width="45%" alt="Logo LUZ"/>
+						</div>
+						<div class="span6">
+							<h1 style="color:#00539F"> Sistema de Agendas</h1>
+							<br />
+							<h1 style="color:#00539F"> Facultad Experimental de Ciencias</h1>
+						</div>
+						<div class="span3 hidden-phone"><img src="./img/logo_fec.png" width="45%" alt="Logo FEC"/>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-		<br />
-		
-		<div class="container visible-desktop pull-right">
-			<ul class="nav nav-pills">
-			    <li class="active">
-			    <a href="#">Opcion1</a>
-			    </li>
-			    <li><a href="#">Opcion2</a></li>
-			    <li><a href="#">Opcion3</a></li>
-		    </ul>
-		</div>
-		<div class="container hidden-desktop"> 
-			<ul class="nav nav-tabs nav-stacked	">
-			    <li class="active">
-			    <a href="#">Opcion1</a>
-			    </li>
-			    <li><a href="#">Opcion2</a></li>
-			    <li><a href="#">Opcion3</a></li>
-		    </ul>
-		</div>
-	</header> 
-    <div class="container">
-		<br/>		
-		<div class="row"> <!-- /Contenedor -->
-			<!-- Menu Izquierda ================================================== -->
-			<div class="span3 offset1 visible-desktop">
-			    <div class="well">
-					<ul class="nav nav-list">
-						<li class="nav-header">
-							Menu de Agenda
-						</li>
-						<li class="active">				
-							<a href="#"><i class="icon-home"></i> Inicio</a>
-						</li>
-						<li>				
-							<a href="#"><i class="icon-list-alt"></i> Consultar Agendas</a>
-						</li>
-						<li class="nav-header">
-							Configuraci&oacute;n
-						</li>
-						<li>
-							<a href="#"><i class="icon-user"></i>Usuario</a>
-						</li>
-						<li>
-							<a href="#"><i class="icon-cog"></i>Opciones</a>
-						</li>
-						<li class="divider"><li>
-						<li>
-							<a href="#"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a>
-						</li>
-					</ul>			
-				</div>
-			</div>
-			<!-- Informacion ================================================== -->
-			<div class="span8">
-				<div class="well">
-					<h1>Bienvenido</h1><br/><p>al nuevo Sistema de Agendas de la Facultad Experimental de Ciencias</p>
-				</div>
-				<h2 style="text-align: center">Inicio de Sesi&oacute;n</h2>
-				<form class="well span3 offset2">
-					<label><strong>Usuario:</strong></label>
-					<input type="text" class="span3" placeholder="Ingrese su Usuario" />
-					<label><strong>Contrase&ntilde;a</strong></label>
-					<input type="password" class="span3" placeholder="Ingrese su Contraseña" />
-					<br />
-					<a href="#">Recuperar Contrase&ntilde;a</a>
-					<input type="button" class="btn btn-primary pull-right" value="Ingresar"/>
-					
-				</form>
 				<br />
-				<div class="row">
-					<p class="span8"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam molestie molestie neque, a congue ante vehicula sit amet. Vestibulum lacus velit, eleifend in blandit cursus, porttitor in turpis. Suspendisse potenti. Fusce nisl est, dignissim quis ultrices at, ultrices id sapien. Mauris eget velit sed mi faucibus auctor eu in libero. Morbi pellentesque lacinia diam a commodo. Ut a tempor mi. Etiam eget dui quis risus placerat scelerisque eget at lectus. Nulla in eros ut mauris hendrerit luctus. Maecenas tincidunt sagittis venenatis. Phasellus vulputate viverra fringilla. Morbi nec iaculis justo.
-						Morbi ac lorem eget massa luctus elementum. Proin semper lobortis lacus vel ornare. Pellentesque et mi justo. Etiam risus sapien, adipiscing vitae placerat a, rutrum non diam. Pellentesque magna nulla, semper quis mattis vel, pharetra id risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Ut aliquam auctor sem, nec dictum est scelerisque quis. Aenean elementum tellus enim. Morbi egestas est vel lacus bibendum vitae pellentesque sapien blandit. Mauris pulvinar nibh sit amet risus ultrices tempor. Praesent rhoncus nibh eu arcu elementum dictum. Etiam lobortis, risus tincidunt sollicitudin egestas, orci lectus volutpat nunc, vitae molestie dui urna ut quam. Pellentesque vulputate tellus eget ante facilisis interdum. Cras laoreet laoreet tempor.
-						Donec diam libero, scelerisque ac pulvinar id, suscipit lobortis diam. Pellentesque ullamcorper augue a elit suscipit vulputate. Integer nec ante vitae libero bibendum venenatis vehicula cursus enim. Phasellus dictum bibendum sapien ac vestibulum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras id enim leo. Curabitur vitae magna quam. </p>
+			</header>
+
+			<!-- Informacion ================================================== -->
+
+				<div class="progress span12 hidden-phone" style="margin-left: 0">
+					<div class="bar" style="width: 100%;"></div>
 				</div>
-			</div><!-- /Fin Informacion -->
-			</div><!-- /Fin Contenedor -->
-		</div> 
-		<div class="row form-actions" style="margin-bottom: 0px !important;">
-			<div class="span12 offset2" style="text-align:center">
-				<h6>&copy; Universidad del Zulia 2012, Derechos Reservados. Maracaibo, Venezuela.</h6>
-			<div>
-		</div>
-
-    <!-- javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="./js/jquery.js"></script>
-    <script src="./js/bootstrap-transition.js"></script>
-    <script src="./js/bootstrap-alert.js"></script>
-    <script src="./js/bootstrap-modal.js"></script>
-    <script src="./js/bootstrap-dropdown.js"></script>
-    <script src="./js/bootstrap-scrollspy.js"></script>
-    <script src="./js/bootstrap-tooltip.js"></script>
-    <script src="./js/bootstrap-popover.js"></script>
-    <script src="./js/bootstrap-button.js"></script>
-    <script src="./js/bootstrap-collapse.js"></script>
-    <script src="./js/bootstrap-carousel.js"></script>
-    <script src="./js/bootstrap-typeahead.js"></script>
-
-  </body>
+				<div class="row span4 offset4" style="min-height: 250px; margin-top:8%; margin-bottom:8%">
+					<form class="row well" style="min-height:170px; text-align: left ">
+						<h3 style="text-align: center">Inicio de Sesi&oacute;n</h3>
+						<br />
+						<div class="input-prepend" style="text-align: center">
+							<span class="add-on"><i class="icon-user"></i></span>
+							<input id="prependedInput" class="span3" type="text" size="16" placeholder="Ingrese su Usuario" >
+						</div>
+						<br />
+						<div class="input-prepend" style="text-align: center">
+							<span class="add-on"><i class="icon-lock"></i></span>
+							<input id="prependedInput" class="span3" type="password" size="16" placeholder="Ingrese su Contraseña" >
+						</div>
+						<br />
+						<a href="#">Olvide mi Contrase&ntilde;a</a>
+						<input type="button" class="btn btn-info pull-right" value="Ingresar"/>
+					</form>
+				</div>
+				<div class="progress span12 hidden-phone" style="margin-left: 0">
+					<div class="bar" style="width: 100%;"></div>
+				</div>
+				</div>
+				<footer class="form-actions" style="text-align: center; bottom: 0; width: 100%">
+					<h6>&copy; Universidad del Zulia 2012, Derechos Reservados. Maracaibo, Venezuela.</h6>
+				</footer>
+	</body>
 </html>
