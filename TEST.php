@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,14 +13,10 @@
         <link href="./css/bootstrap.css" rel="stylesheet">
         <link href="./css/bootstrap-responsive.css" rel="stylesheet">
         <link href="./css/datepicker.css" rel="stylesheet">
-        <link href="./css/bootstrap-wysihtml5.css" rel="stylesheet">
         <!-- JavaScrips -->
         <script src="./js/jquery.js"></script>
         <script src="./js/bootstrap-datepicker.js"></script>
-        <script src="./js/utilidades.js"></script>
         <script src="./js/bootstrap.js"></script>
-        <script src="./js/wysihtml5-0.3.0.min.js"></script>
-        <script src="./js/bootstrap-wysihtml5.js"></script>
     </head>
 
     <body  style="margin-top:50px;">
@@ -32,7 +29,7 @@
                     <img src="./img/logo_luz.png" alt="Logo LUZ" width="60" height="70" style="padding:10px; ">
                 </div>
                 <div class="pull-right" style="width:70%" >
-                    <h1 style="color:#00539F; text-align: center">Sistema de Agendas de la Facultad Experimental de Ciencias</h1>
+                    <h1 style="color:#00539F; font-size:20px; text-align: center">Sistema de Agendas de la Facultad Experimental de Ciencias</h1>
                 </div>
             </div>
 
@@ -45,8 +42,9 @@
                         </div>
 
                         <div class="span6">
-                            <h2 style="color:#00539F">Sistema de Agendas</h2>
-                            <h2 style="color:#00539F">Facultad Experimental de Ciencias</h2>
+                            <h1 style="color:#00539F">Sistema de Agendas</h1>
+                            <br />
+                            <h1 style="color:#00539F">Facultad Experimental de Ciencias</h1>
                         </div>
                         <div class="span3 hidden-phone"><img src="./img/logo_fec.png" width="100" height="100" alt="Logo FEC">
                             <br />
@@ -81,7 +79,7 @@
             <!-- Menu Horizontal ================================================== -->
             <div id="menuh">
                 <div class="hidden-phone row-fluid">
-                    <ul class="nav nav-pills span8">
+                    <ul class="nav nav-pills span9">
                         <li class="active">
                             <a id="op1" href="index.php"><strong>Inicio</strong></a>
                         </li>
@@ -98,7 +96,7 @@
                     <div class="span3 visible-desktop">
                         <form class="form-search">
                             <div class="input-append">
-                                <input type="text" class="search-query" placeholder="Busqueda en Agendas">
+                                <input type="text" class="search-query" >
                                 <button type="submit" class="btn">Buscar</button>
                             </div>
                         </form>
@@ -121,4 +119,71 @@
                     </ul>
                 </div>
             </div>
-            
+
+
+            <!-- Menu Izquierda ================================================== -->
+            <div id="menuf" class="span3 hidden-phone" style="margin-left: 0px;">
+                <div class="label well">
+                    <ul class="nav nav-list menu">
+                        <li>
+                            <a href="bienvenido.php"><i class="icon-home"> </i>Inicio</a>
+                        </li>
+                        <li class="nav-header">
+                            Menu de Agenda
+                        </li>
+                        <li>
+                            <a href="nuevaAgenda.php"><i class="icon-list-alt"> </i>Crear Agenda</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="icon-search"> </i>Consultar Agendas</a>
+                        </li>
+                        <li class="nav-header">
+                            Configuraci&oacute;n
+                        </li>
+                        <li>
+                            <a href="#"><i class="icon-user"> </i>Usuario</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="icon-cog"> </i>Opciones</a>
+                        </li>
+                        <li class="divider"><li>
+                        <li>
+                            <a data-toggle="modal" href="#myModal"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="info">
+                <div class="span9" padding="0px;">
+                    <div class="well" style="min-height:450px; text-align:justify;">
+
+                        <!-- info ================================================== -->
+                        <div class="page-header" style="text-align: center">
+                            <h1>Nueva Agenda</h1>
+                        </div>
+                        <form class="form-horizontal">
+                            <div class="control-group">
+                                <legend>Informacion Inicial</legend>
+                                <label class="control-label" for="inputEmail">Email</label>
+                                <div class="controls">
+                                    <input type="text" class="span2" value="30-08-2012" data-date-format="dd-mm- yyyy" id="fecha"/>
+                                </div>
+                                <button type="submit" class="btn">Aceptar</button>
+                                <div/>
+                        </form>
+                        <script type="text/javascript">
+                            $('#fecha').datepicker();
+                        </script>
+                        <a href="#cuerpo" class="btn btn-info pull-right"><i class="icon-arrow-up icon-white"></i>Subir</a>
+                        </div><!--fin de well -->
+                </div><!--fin de span9 -->
+            </div><!--fin de info -->
+            <div class="progress span12 hidden-phone" style="margin-left: 0">
+                <div class="bar" style="width: 100%;"></div>
+            </div>
+        </div> <!-- Fin Cuerpo -->
+        <footer class="form-actions" style="text-align: center; bottom: 0; width: 100%">
+            <h6>&copy; Universidad del Zulia 2012, Derechos Reservados. Maracaibo, Venezuela.</h6>
+        </footer>
+    </body>
+</html>
