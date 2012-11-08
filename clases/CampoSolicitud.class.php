@@ -1,29 +1,31 @@
 <?php
 
+
 /**
- * Description of Pertenencia
+ * Description of campos_solicitud
  *
  * @author Edgar Rincon
  */
-class Pertenencia extends Conexion{
-    protected $dependencia;
-    protected $consejero;
+class CampoSolicitud extends Conexion{
 
-    function __construct($depen='', $conse='') {
-        $this->dependencia = $depen;
-        $this->consejero = $conse;
+    protected $tipo_solicitud;
+    protected $campo;
+
+    function __construct($solicitud='', $campo='') {
+        $this->tipo_solicitud = $solicitud;
+        $this->campo = $campo;
     }
-
+    
     public function __destruct() {
         foreach ($this as $key => $value) {
             unset($this->$key);
         }
     } 
 
-    public function buscarConsejeros() {
+    public function buscar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("SELECT id_consejero FROM pertenencia WHERE id_dependencia ='" . $this->dependencia. "'");
+            $exec = $this->conexion->prepare('SELECT * FROM campos_solicitud');
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -32,11 +34,10 @@ class Pertenencia extends Conexion{
         }
     }
 
-
-    public function buscar() {
+    public function buscarCampos(){
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT * FROM pertenencia');
+            $exec = $this->conexion->prepare("SELECT id_campo FROM campos_solicitud WHERE id_tipo_solicitud ='".$this->tipo_solicitud."'");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -48,7 +49,7 @@ class Pertenencia extends Conexion{
     public function insertar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO pertenecia (id_dependencia,id_consejero) VALUES('" . $this->dependencia. "','" . $this->consejero. "');");
+            $exec = $this->conexion->prepare("INSERT INTO campos_solicitud (id_tipo_solicitud,id_campo) VALUES('" . $this->tipo_solicitud . "','" . $this->campotipo_solicitud . "');");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -57,12 +58,12 @@ class Pertenencia extends Conexion{
         }
     }
 
-    public function actualizar($depen, $conse) {
+    public function actualizar($solicitud, $campo) {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("UPDATE pertenencia SET id_dependencia= '" . $depen . "',id_consejero='" . $conse. "' WHERE id_dependencia='" . $this->dependencia. "' AND id_consejero='" . $this->consejero. "';");
+            $exec = $this->conexion->prepare("UPDATE campos_solicitud SET id_tipo_solicitud = '" . $solicitud . "',id_campo='" . $campo . "' WHERE id_tipo_solicitud='" . $this->tipo_solicitud . "' AND id_campo='" . $this->campo . "';");
             $exec->execute();
-            echo "Pertenencia actualizada exitosamente";
+            echo "Relacion actualizada exitosamente";
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -71,13 +72,14 @@ class Pertenencia extends Conexion{
     public function eliminar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("DELETE FROM pertenencia WHERE id_dependencia='" . $this->dependencia. "' AND id_consejero='" . $this->consejero. "'");
+            $exec = $this->conexion->prepare("DELETE FROM campos_solicitud WHERE id_tipo_solicitud='" . $this->tipo_solicitud . "' AND id_campo='" . $this->campo . "'");
             $exec->execute();
-            echo "Pertenencia eliminada exitosamente";
+            echo "Relacion eliminada exitosamente";
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
     }
+
 }
 
 ?>

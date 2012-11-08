@@ -3,7 +3,7 @@
 /*
  * Description of rol
  *
- * @author Danet
+ * @author Edgar Rincon
  */
 require_once ('Conexion.class.php');
 
@@ -12,15 +12,21 @@ class Rol extends Conexion {
     protected $id;
     protected $descripcion;
 
-    function __construct($id, $desc) {
+    function __construct($id='', $desc='') {
         $this->id = $id;
         $this->descripcion = $desc;
     }
 
-    public function buscar() {
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
+
+    public function buscarTodos() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT * FROM roles');
+            $exec = $this->conexion->prepare('SELECT id_rol FROM roles');
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -29,6 +35,17 @@ class Rol extends Conexion {
         }
     }
 
+     public function buscar() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("SELECT descripcion FROM roles WHERE id_rol = '".$this->id."'");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            $this->descripcion=$consulta[0]['descripcion'];
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
     public function insertar() {
         try {
             $this->getConexion();

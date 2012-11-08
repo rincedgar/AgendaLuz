@@ -1,27 +1,43 @@
-<div class="modal-header dependencia">
-	<button type="button" class="close" data-dismiss="modal">
-		×
-	</button>
-	<h3>DC-040-2012</h3>
+<link href="./css/bootstrap-wysihtml5.css" rel="stylesheet"/>
+<script src="./js/wysihtml5-0.3.0.min.js"></script>
+<script src="./js/bootstrap-wysihtml5.js"></script>
+<script src="./js/utilidades.js"></script>
+<div class="modal-header">
+    <h3>Crear Punto</h3>
 </div>
-<div class="modal-body">
-	<div class="row">
-		<div class="span5" style="text-align: justify">
-			<h3>Asunto:</h3>
-			<p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. </p>
-			<br />
-			<h3>Estatus:</h3>
-			<h2 style="color: #57A957">Aprobado</h2><br />
-			<h3>Observaciones:</h3>
-			<p>
-				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-			</p><br />
-			<h3>Documentos Adjuntos:</h3>
-			<p>Lorem, ipsum, dolor, sit, amet.</p><br />
-		</div>
-	</div>
-	<span class="label label-info span5"></span>
+<div class="modal-body" id="asunto" data-asunto="">
+    <div class="row span9">
+        <form id="form">
+            <div class="span6">
+                <input hidden='hidden' id='subasunto' name='subasunto' value=<?php echo $_GET['sub'];?>></input>
+                <div class="control-group" id="pdescripcion" >
+                    <label class="control-label" >Descripcion:</label>
+                    <div class="controls">
+                        <textarea class="textarea" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="width: 512px; height: 200px"></textarea>
+                        <br/><br/>
+                        <input type="button" class="btn btn-primary" id="detalle" value="Detalle"/>
+
+                    </div>               
+                </div>
+                <div class="control-group hidden" id="pdetalle">
+                    <label class="control-label" >Detalles:</label>
+                    <div class="controls">
+                        <textarea class="textarea" id="det_punto" name="det_punto" placeholder="Escriba la descripción del punto ..." style="width: 512px; height: 200px"></textarea>
+                        <br/><br/>
+                        <input type="button" class="btn btn-primary" id="regreso" value="Volver"/>
+                    </div>               
+                </div>
+            </div>
+            <div class="row span2 well">
+                <button type="button" class="btn btn-success" id="sig_punto"><i class="icon-arrow-right icon-white"></i><b> Siguiente Punto</b></button> 
+            </div>
+        </form>
+    </div>
 </div>
+<script type="text/javascript">
+    $('#menuh').hide();
+</script>
 <div class="modal-footer">
-	<a href="#" class="btn btn-primary" data-dismiss="modal">Salir</a>
+    <a href="#" class="btn btn-large btn-primary">Aceptar</a>
+    <a href="#" class="btn btn" data-dismiss="modal">Salir</a>
 </div>

@@ -17,6 +17,12 @@ class Dependencias extends Conexion {
         $this->descripcion = $desc;
     }
 
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
+
     public function buscar() {
         try {
             $this->getConexion();

@@ -8,24 +8,23 @@
 require_once ('Conexion.class.php');
 
 class Agenda extends Conexion {
-    const SELECT_ALL_SQL = "SELECT * FROM agenda";
-    const PROXIMAS_AGENDAS= "select a.id_agenda, a.fecha, d.id_dependencia, d.descripcion as dependencia, tc.id_tipo_consejo, tc.descripcion,tc.siglas, EXTRACT(YEAR FROM a.fecha) as anio from participantes p
-join agenda a on a.id_agenda=p.id_agenda 
-join tipo_agenda ta on ta.id_agenda=a.id_agenda
-join tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo
-join dependencias d on d.id_dependencia=ta.id_dependencia
-where a.fecha >=current_date AND p.id_consejero=1 and ta.id_agenda=1
-group by a.id_agenda, a.fecha, d.descripcion, tc.descripcion, tc.siglas,d.id_dependencia,tc.id_tipo_consejo
-order by a.fecha";
-
+    
     protected $idAgenda;
-    protected $fecha = null;
+    protected $fecha;
+    protected $estatus;
+    
 
     function __construct($id="", $fecha="") {
         $this->idAgenda = $id;
         $this->fecha = $fecha;
     }
 
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    }
+     
     public function buscar() {
         try {
             $this->getConexion();
@@ -41,14 +40,10 @@ order by a.fecha";
     public function insertar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO agenda (fecha) VALUES('" . $this->fecha . "')RETURNING id_agenda;");
-
-            // $exec= $this->conexion->prepare('INSERT INTO consejeros (nombre,apellido,desde,hasta) values("' . $this->nombre . '","' . $this->apellido . '",' . $this->desde . ',' . $this->hasta . ')RETURNING id_consejero;');
-            //$parametros = array($this->nombre, $this->apellido, $this->desde, $this->hasta);
-            //$consulta = $this->conexion->execute($sql, $parametros);
+            $exec = $this->conexion->prepare("INSERT INTO agenda (fecha) VALUES('" . $this->fecha . "') RETURNING id_agenda;");
             $exec->execute();
             $consulta = $exec->fetchAll();
-            return $consulta;
+            return $consulta[0]['id_agenda'];
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -68,7 +63,7 @@ order by a.fecha";
     public function eliminar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("DELETE FROM agenda WHERE id_agenda = " . $this->idAgenda . "");
+            $exec = $this->conexion->prepare("DELETE FROM agenda WHERE id_agenda = '". $this->idAgenda."'");
             $exec->execute();
             echo "Agenda eliminada exitosamente";
         } catch (PDOException $e) {
@@ -84,7 +79,7 @@ order by a.fecha";
                 JOIN tipo_agenda ta on ta.id_agenda=a.id_agenda 
                 JOIN tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo 
                 JOIN dependencias d on d.id_dependencia=ta.id_dependencia 
-                WHERE a.id_agenda=$this->idAgenda 
+                WHERE a.id_agenda='".$this->idAgenda."'' 
                 GROUP BY a.id_agenda, a.fecha, d.descripcion, tc.descripcion, tc.siglas,d.id_dependencia,tc.id_tipo_consejo 
                 ORDER BY a.fecha");
 
@@ -137,12 +132,11 @@ order by a.fecha";
         try {
             $this->getConexion();
             $anio = $anio . '-01-01';
-
-            $consul = "select count(a.id_agenda)as consecutivo
+            $consul = "select count(a.id_agenda) as consecutivo
             from tipo_agenda ta
             join agenda a on a.id_agenda=ta.id_agenda
             join tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo
-            where a.fecha between '$anio' AND '$fecha' AND ta.id_tipo_consejo=$consejo AND ta.id_dependencia=$dependencia";
+            where a.fecha between '".$anio."' AND '".$fecha."' AND ta.id_tipo_consejo='".$consejo."' AND ta.id_dependencia='".$dependencia."'";
             $exec = $this->conexion->prepare($consul);
             $exec->execute();
 

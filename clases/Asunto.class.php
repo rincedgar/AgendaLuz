@@ -17,7 +17,13 @@ class Asunto extends Conexion {
         $this->descripcion = $desc;
     }
 
-    public function buscar() {
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
+    
+    public function buscarTodos() {
         try {
             $this->getConexion();
             $exec = $this->conexion->prepare('SELECT * FROM asuntos ORDER BY orden');

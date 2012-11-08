@@ -23,17 +23,26 @@ class Consejero extends Conexion {
         $this->hasta = $hasta;
     }
 
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
+
     public function buscar() {
         try {
 
             if (!$this->getConexion())
                 return 0;
             else {
-                $consul= "SELECT * FROM consejeros WHERE id_consejero = $this->id";
+                $consul= "SELECT * FROM consejeros WHERE id_consejero = '".$this->id."'";
                 $exec = $this->conexion->prepare($consul);
                 $exec->execute();
                 $consulta = $exec->fetchAll();
-                return $consulta;
+                $this->nombre=$consulta[0]['nombre'];
+                $this->apellido=$consulta[0]['apellido'];
+                $this->desde=$consulta[0]['desde'];
+                $this->hasta=$consulta[0]['hasta'];
             }
         } catch (PDOException $e) {
             echo "Error de conexión:" . $e->getMessage();
@@ -110,6 +119,25 @@ join tipo_agenda ta on ta.id_agenda=a.id_agenda
 join tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo
 join dependencias d on d.id_dependencia=ta.id_dependencia
 where a.fecha >=current_date AND p.id_consejero=$usuario 
+group by a.id_agenda, a.fecha, d.descripcion, tc.descripcion, tc.siglas,d.id_dependencia,tc.id_tipo_consejo
+order by a.fecha");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            return $consulta;
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
+    
+    public function agendasAnteriores($usuario) {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("select a.id_agenda, a.fecha, d.id_dependencia, d.descripcion as dependencia, tc.id_tipo_consejo, tc.descripcion,tc.siglas, EXTRACT(YEAR FROM a.fecha) as anio from participantes p
+join agenda a on a.id_agenda=p.id_agenda 
+join tipo_agenda ta on ta.id_agenda=a.id_agenda
+join tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo
+join dependencias d on d.id_dependencia=ta.id_dependencia
+where a.fecha <=current_date AND p.id_consejero=$usuario
 group by a.id_agenda, a.fecha, d.descripcion, tc.descripcion, tc.siglas,d.id_dependencia,tc.id_tipo_consejo
 order by a.fecha");
             $exec->execute();

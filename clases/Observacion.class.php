@@ -21,6 +21,12 @@ class Observacion extends Conexion {
         $this->idPunto = $punto;
     }
 
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
+
     public function buscar() {
         try {
             $this->getConexion();

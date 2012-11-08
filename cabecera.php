@@ -2,24 +2,27 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Boceto de Agendas</title>
+        <title>Sistema de Agendas</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Sistema de Agendas LUZ">
         <meta name="author" content="Edgar Rincon">
-
+        <link rel="shortcut icon" href="favicon.ico" >
         <!-- Estilos -->
         <link href="./css/agenda.css" rel="stylesheet">
         <link href="./css/bootstrap.css" rel="stylesheet">
         <link href="./css/bootstrap-responsive.css" rel="stylesheet">
         <link href="./css/datepicker.css" rel="stylesheet">
         <link href="./css/bootstrap-wysihtml5.css" rel="stylesheet">
+        <link href="./css/chosen.css" rel="stylesheet">
+        <link href="./css/jquery.fancybox.css" rel="stylesheet">
         <!-- JavaScrips -->
         <script src="./js/jquery.js"></script>
         <script src="./js/bootstrap-datepicker.js"></script>
         <script src="./js/utilidades.js"></script>
         <script src="./js/bootstrap.js"></script>
-        <script src="./js/wysihtml5-0.3.0.min.js"></script>
-        <script src="./js/bootstrap-wysihtml5.js"></script>
+        <script src="./js/chosen.jquery.js"></script>
+        <script src="./js/jquery.fancybox.pack.js"></script>
+        
     </head>
 
     <body  style="margin-top:50px;">
@@ -40,7 +43,7 @@
             <header style="text-align: center;">
                 <div class="row span12 hidden-desktop" style=" margin-top: 100px"></div>
                 <div class="container">
-                    <div class="row-fluid hidden-phone">
+                    <div class="row hidden-phone">
                         <div class="span3" id="logo"><img src="./img/logo_luz.png" width="90" height="105" alt="Logo LUZ">
                         </div>
 
@@ -80,10 +83,10 @@
             </header>
             <!-- Menu Horizontal ================================================== -->
             <div id="menuh">
-                <div class="hidden-phone row-fluid">
+                <div class="hidden-phone row">
                     <ul class="nav nav-pills span8">
                         <li class="active">
-                            <a id="op1" href="index.php"><strong>Inicio</strong></a>
+                            <a id="op1" href="#">Opcion1</a>
                         </li>
                         <li>
                             <a id="op2" href="#">Opcion2</a>

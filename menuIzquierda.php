@@ -1,6 +1,6 @@
 
 <!-- Menu Izquierda ================================================== -->
-<div id="menui" class="span3 hidden-phone"  style="margin-left: 0px;">
+<div id="menui" class="span3 hidden-phone" style="margin-left: 0px;">
     <div class="label well">
         <ul class="nav nav-list menu">
             <li>
@@ -10,10 +10,10 @@
                 Menu de Agenda
             </li>
             <li>
-                <a href="nuevaAgenda.php"><i class="icon-list-alt"> </i>Crear Agenda</a>
+                <a href="nuevaAgenda.php"><i class="icon-book"> </i>Crear Agenda</a>
             </li>
             <li>
-                <a href="#"><i class="icon-search"> </i>Consultar Agendas</a>
+                <a href="busqueda.php"><i class="icon-search"> </i>Consultar Agendas</a>
             </li>
             <li class="nav-header">
                 Configuraci&oacute;n
@@ -31,6 +31,6 @@
         </ul>
     </div>
 </div>
-<div id="info">
-    <div class="span9" padding="0px;">
-        <div class="well" id="cuerpo" style="min-height:250px; text-align:justify;">
+<div id="informacion">
+    <div class="span9" padding="0px">
+        <div class="well" id="info" style="min-height:250px; text-align:justify;">

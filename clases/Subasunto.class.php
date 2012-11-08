@@ -17,10 +17,31 @@ class Subasunto extends Conexion {
         $this->descripcion=$desc;
     }
 
-    public function buscar() {
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
+    
+    public function buscarTodos() {
         try {
             $this->getConexion();
             $exec = $this->conexion->prepare('SELECT * FROM subasuntos');
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            return $consulta;
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
+    
+    public function buscar($asunto) {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("SELECT s.id_subasunto, s.descripcion 
+            FROM subasuntos s
+            JOIN relaciones r ON r.id_subasunto = s.id_subasunto
+            WHERE r.id_asunto = $asunto");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;

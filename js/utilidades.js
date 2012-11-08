@@ -1,175 +1,226 @@
-/*function validar(boton)
-{
-    
-    var id = $(this).attr("id");
-    alert("atr:"+id);
-    switch (boton) {
-        case 'Insertar':
 
-            document.getElementById("opcion").value='insertar'+document.getElementById("opcion").value;
 
-            var datos = $("#form").serialize(); 
-            $.ajax({
-                type: 'POST',
-                dataType: "json",
-                url: 'respose.php',
-                data: datos,
-                success: function(datos){
-                    alert(datos);
-
-                }
-
-            });
-            break;
-
-        case 'Buscar':
-            document.getElementById("opcion").value='buscar'+document.getElementById("opcion").value;
-            var datos = $("#form").serialize();
-
-            $.ajax({
-                type: 'POST',
-                dataType: "json",
-                url: 'respose.php',
-                data: datos,
-                success: function(datos){
-                    alert(datos);
-
-                    $("div#resultados").show();
-                    for(var i=0;i<datos.length;i++)
-                    {
-                        $("div#resultados").append("<br/><b>&nbsp;&nbsp; Nombre:</b> "+datos[i].nombre);
-                        $("div#resultados").append("<b>&nbsp;&nbsp; Apellido:</b> "+datos[i].apellido);
-                        $("div#resultados").append("<b>&nbsp;&nbsp; Desde:</b> "+datos[i].desde+"<br/>");
-                        $("div#resultados").append("<b>&nbsp;&nbsp; Hasta:</b> "+datos[i].hasta);
-
-                    }
-
-                }
-
-            });
-            break;
-
-    }
-                    
-}*/
-
-$().ready(function() {
+$(document).ready(function() {
  
-   
-//    $('#dfecha').datepicker();
-//   $('#fecha').click(function (e) 
-//    {
-//        $('#oculto').slideDown('slow');
-//    });
-   $('#fecha').datepicker().on('changeDate', function(ev){
-       $('#oculto').slideDown('slow'); 
-       $('#subir').removeClass('hidden');
-//        if (ev.date.valueOf() < startDate.valueOf())
-//        {
-//            alert('La fecha debe ser mayor al día de hoy');
-//        }
-//        else
-//        {
-//            $('#oculto').slideDown('slow'); 
-//        }
+    $('#fecha').datepicker().on('changeDate', function(ev){
+            var dias = $('#dia').val();
+            var hoys = $('#fecha').attr('data-date');
+            var dia = dias.split('-');
+            var hoy = hoys.split('-');
+            var x=new Date();
+            x.setFullYear(dia[2],dia[1],dia[0]);
+            var y=new Date();
+            y.setFullYear(hoy[2],hoy[1],hoy[0]);
+            if (x<y)
+                {
+                    $('#errorFecha').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(5000);});
+                }
+            else
+            {
+                $('#oculto').slideDown('slow');        
+                $('#subir').removeClass('hidden');
+            }
+            $('#fecha').datepicker('hide');
     });
     
+    $('.chzn-select').chosen();
+    
+    $('.Modal').fancybox({
+        type: 'ajax',
+        autoSize:true,
+        autoResize:true,
+        autoCenter:true,
+        scrollOutside:true
+    });
+
+    function resetForm(id) {
+        $('#'+id).each(function(){
+                this.reset();
+        });
+    }
+
+    $('#regreso').click(function(){       
+        $('#aread').slideDown('slow'); 
+        $('#aread').removeClass('hidden');
+        $('#pdetalle').hide('slow');
+        $('#regreso').hide('slow'); 
+    });
+    
+    $('#detalle').click(function(){       
+        $('#pdetalle').slideDown('slow'); 
+        $('#pdetalle').removeClass('hidden');
+        $('#aread').hide('slow');
+        $('#regreso').show();
+    });
     
     $('.typeahead').typeahead();
-    $('.textarea').wysihtml5({
-        autoSave:true,
-        autoGrow:true,
-        "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
-	"emphasis": true, //Italics, bold, etc. Default true
-	"lists": true, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
-	"html": false, //Button which allows you to edit the generated HTML. Default false
-	"link": false, //Button to insert a link. Default true
-	"image": false, //Button to insert an image. Default true,
-	"color": false //Button to change color of font  
-    }); 
     
-    $('#reset1').click(function(){
-        alert('entre');
-        $('.textarea').wysiwyg('clear');
+   
+    $('#sel_dependencia').change(function (e){ //Siguiente Punto --Mostrar tabla
+        var dependencia = $(this).attr('value');
+        var datos='operacion=1&dependencia='+dependencia;
+            $.ajax({
+                type: 'POST',
+                dataType: "html",
+                url: 'controladores/controlador_nuevaAgenda.php',
+                data: datos,
+                success: function(datos){
+                    $('#dparticipantes').empty();
+                    $('#dparticipantes').append(datos);
+                    $('.chzn-select').chosen();
+                    $('#dparticipantes').removeClass('hidden').slideDown('slow');
+                    $('#dpuntos').removeClass('hidden').slideDown('slow');
+                }
+            });          
     });
     
-   
+    $('#agregar_punto').click(function(e){
+        
+        var idAsunto = $('#sel_asuntos').val();
+        if(idAsunto!='0'){
+            var url = './nuevoPunto.php?sub='+idAsunto;
+            $('#agregar_punto').attr('href',url);
+            $('#agregar_punto').fancybox({
+                type: 'ajax',
+                fitToView:true,
+                autoSize:true,
+                autoCenter:true,
+
+            });
+        }
+        else{
+            alert('Debe seleccionar una dependencia');
+        }
+    });
     
-   
-   /*$('#todos').click(function (e)
-    {
-      $('#sconsejeros:selected')   
-    });*/
- 
-
-     /*
-    $(".boton").click(function (e) {
-      //  alert('class');
-        var id = $(this).attr("id");
-        alert("atr:"+id);
-        u=document.getElementById("opcion").value=id+document.getElementById("opcion").value;
-        alert(u);
-        var datos = $("#form").serialize();
-        //var id=document.getElementById("form").value;
-        //alert("datos "+datos);
-        url='/controladores/controlador'+document.getElementById("url").value+'.php';
-        alert(url);
-      //  alert(document.getElementById("url").value);
-        $.ajax({
-            type: 'POST',
-            dataType: "json",
-            url: url,
-            data: datos,
-            success: function(datos){
-                
-                switch(document.getElementById("url").value)
-                {
-                    case '_Consejeros':
-                        switch(id)
-                        {
-                            case 'buscar':
-                                $("div#resultados").show();
-                                for(var i=0;i<datos.length;i++)
-                                {
-                                    $("div#resultados").append("<br/><b>&nbsp;&nbsp; Nombre:</b> "+datos[i].nombre);
-                                    $("div#resultados").append("<b>&nbsp;&nbsp; Apellido:</b> "+datos[i].apellido);
-                                    $("div#resultados").append("<b>&nbsp;&nbsp; Desde:</b> "+datos[i].desde+"<br/>");
-                                    $("div#resultados").append("<b>&nbsp;&nbsp; Hasta:</b> "+datos[i].hasta);
-                	
-                                }
-                                break;
-                                
-                            case 'insertar':
-                                alert("Registro Insertado con exito");                                
-                                break; 
-                                
-                        }
-                        break;
-                        
-                    case '_Agenda':
-                        switch(id)
-                        {
-                            case 'buscar':
-                                $("div#resultados").show();
-                                for(var i=0;i<datos.length;i++)
-                                {
-                                    $("div#resultados").append("<br/><b>&nbsp;&nbsp; id:</b> "+datos[i].id_agenda);
-                                    $("div#resultados").append("<b>&nbsp;&nbsp; Agenda:</b> "+datos[i].fecha);                               
-                                }
-                                break;
-                                
-                            case 'insertar':
-                                alert("Registro Insertado con exito");                                
-                                break; 
-                                
-                        }
-                        break;
+    $('#sel_solicitud').change(function (e){ //Siguiente Punto --Mostrar tabla
+        var datos='tipo_solicitud='+$(this).attr('value');
+            $.ajax({
+                type: 'POST',
+                dataType: "html",
+                url: 'controladores/controlador_solicitudes.php',
+                data: datos,
+                success: function(datos){
+                    $('#resul_solicitud').empty();
+                    $('#resul_solicitud').append(datos);
                 }
-              
-                    		
-            }
-            
-        });
+            });          
+    });
+    
+     $('#siguientePunto').click(function (e){ //Siguiente Punto -- Guardar en arreglo temp
+        var datos='operacion=1&'+$('#form').serialize();
+        var punto = $("#desc_punto").val();
+        var detalle = $("#det_punto").val();
+        if(punto != ''){
+            $.ajax({
+                type: 'POST',
+                dataType: "json",
+                url: 'controladores/controlador_nuevoPunto.php',
+                data: datos,
+                success: function(datos){
+                    $('#aread').empty().html('<textarea class="textarea" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="width: 512px; height: 200px"></textarea>');
+                    $('#areadt').empty().html('<textarea class="textarea" id="det_punto" name="det_punto" placeholder="Escriba la descripción del punto ..." style="width: 512px; height: 200px"></textarea>');
+                    $('#pdescripcion').slideDown('slow'); 
+                    $('#pdescripcion').removeClass('hidden');
+                    $('#pdetalle').hide('slow');
+                    $('#regreso').hide('slow'); 
+                    $('#exitoPunto').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(3000);});
+                },
+                error: function (e){
+                    $('#errorPunto').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(3000);});
+                }
+            });          
+        }
+        else {
+            alert("Debe escribir una descripcion del punto");
+        }
+    });     
+    
+    $('#guardarPunto').click(function (e){ //Siguiente Punto --Mostrar tabla
+        var datos='operacion=2&'+$('#form').serialize();
+        var punto = $("#desc_punto").val();       
+        if(punto != ''){
+            $.ajax({
+                type: 'POST',
+                dataType: "html",
+                url: 'controladores/controlador_nuevoPunto.php',
+                data: datos,
+                success: function(datos){
+                 
+                    parent.$.fancybox.close();    
+                    $("#tablaPuntos").empty();
+                    $('#tablaPuntos').append(datos);
+                    $('#tablaPuntos').removeClass('hidden'); 
+                    $('#tablaPuntos').slideDown('slow'); 
 
-    });*/
+                }
+            });
+        }
+        else {
+                alert("Debe escribir una descripcion del punto");
+            }        
+            
+    });
+
+    $('#cancelarAgenda').click(function (e){ //Siguiente Punto --Mostrar tabla
+        var datos='operacion=3&'+$('#form').serialize();
+            $.ajax({
+                type: 'POST',
+                dataType: "html",
+                url: 'controladores/controlador_nuevoAgenda.php',
+                data: datos,
+                success: function(datos){
+                 window.location='bienvenido.php'; 
+                }
+            });        
+            
+    });
+
+    $('#guardarAgenda').unbind("click").click(function(){
+        var datos='operacion=2&'+$('#fagenda').serialize();     
+            $.ajax({
+                type: 'POST',
+                dataType: "html",
+                url: 'controladores/controlador_nuevaAgenda.php',
+                data: datos,
+                success: function(datos){
+                    $('#resultado').empty();
+                    $("#tablaPuntos").empty();
+                    $('#resultado').append(datos);
+                    if($('#resul').attr('name')=='exito'){
+                        window.location='nuevaAgenda.php';
+                    }
+                }
+            });
+    });
+
+
+   
+    $('.b_observacion').click(function (e){
+         var id = $(this).attr('id').split('_');
+         $('#obs_'+id[2]).toggle();
+    });
+    
+    $('.b_decision').click(function (e){
+         var id = $(this).attr('id').split('_');
+         $('#dec_'+id[2]).toggle();
+    });
+    
+    
+    
+    $('#filtro').change(function() {
+        var opcion = $("#filtro").val();
+        switch(opcion){
+            case '1':
+                $('#ffecha').addClass('hidden');
+                $('#fidentificador').removeClass('hidden');
+                break;
+            case '2':
+                $('#fidentificador').addClass('hidden');
+                $('#ffecha').removeClass('hidden');
+                break;
+        }
+    });
+
+   
 });

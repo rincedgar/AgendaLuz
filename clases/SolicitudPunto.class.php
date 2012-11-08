@@ -2,18 +2,18 @@
 
 
 /**
- * Description of Relaciones
+ * Description of solicitud_punto
  *
  * @author Edgar Rincon
  */
-class Relaciones extends Conexion {
+class SolicitudPunto extends Conexion {
 
-    protected $asunto;
-    protected $subasunto;
+    protected $punto;
+    protected $tipo_solicitud;
 
-    function __construct($asun, $sub) {
-        $this->asunto = $asun;
-        $this->subasunto = $sub;
+    function __construct($punto, $sub) {
+        $this->punto = $punto;
+        $this->tipo_solicitud = $sub;
     }
 
     public function __destruct() {
@@ -25,7 +25,7 @@ class Relaciones extends Conexion {
     public function buscar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT * FROM relaciones');
+            $exec = $this->conexion->prepare('SELECT * FROM solicitud_punto');
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -37,7 +37,7 @@ class Relaciones extends Conexion {
     public function insertar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO relaciones (id_asunto,id_subasunto) VALUES('" . $this->asunto . "','" . $this->subasuntoasunto . "');");
+            $exec = $this->conexion->prepare("INSERT INTO solicitud_punto (id_punto,id_tipo_solicitud) VALUES('" . $this->punto . "','" . $this->tipo_solicitudpunto . "');");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -46,10 +46,10 @@ class Relaciones extends Conexion {
         }
     }
 
-    public function actualizar($asun, $subasun) {
+    public function actualizar($punto, $solicitud) {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("UPDATE relaciones SET id_asunto = '" . $asun . "',id_subasunto='" . $subasun . "' WHERE id_asunto='" . $this->asunto . "' AND id_subasunto='" . $this->subasunto . "';");
+            $exec = $this->conexion->prepare("UPDATE solicitud_punto SET id_punto = '" . $punto . "',id_tipo_solicitud='" . $solicitud . "' WHERE id_punto='" . $this->punto . "' AND id_tipo_solicitud='" . $this->tipo_solicitud . "';");
             $exec->execute();
             echo "Relacion actualizada exitosamente";
         } catch (PDOException $e) {
@@ -60,7 +60,7 @@ class Relaciones extends Conexion {
     public function eliminar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("DELETE FROM relaciones WHERE id_asunto='" . $this->asunto . "' AND id_subasunto='" . $this->subasunto . "'");
+            $exec = $this->conexion->prepare("DELETE FROM solicitud_punto WHERE id_punto='" . $this->punto . "' AND id_tipo_solicitud='" . $this->tipo_solicitud . "'");
             $exec->execute();
             echo "Relacion eliminada exitosamente";
         } catch (PDOException $e) {

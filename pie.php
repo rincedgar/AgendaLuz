@@ -1,7 +1,7 @@
                 <a id="subir"  href="#cuerpo" class="btn btn-info pull-right hidden"><i class="icon-arrow-up icon-white"></i>Subir</a>
-            </div><!--fin de well -->
+            </div><!--fin de info -->
         </div><!--fin de span9 -->
-    </div><!--fin de info -->
+    </div><!--fin de informacion -->
     <div class="progress span12 hidden-phone" style="margin-left: 0">
         <div class="bar" style="width: 100%;"></div>
     </div>

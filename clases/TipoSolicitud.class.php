@@ -1,20 +1,20 @@
 <?php
 
-/**
- * Description of Estatus
+/*
+ * Description of Tipo de Solicitud
  *
  * @author Edgar Rincon
  */
 require_once ('Conexion.class.php');
 
-class Estatus extends Conexion {
+class TipoSolicitud extends Conexion {
 
     protected $id;
     protected $descripcion;
 
-    function __construct($id='',$desc='') {
-        $this->id=$id;
-        $this->descripcion=$desc;        
+    function __construct($id='', $desc='') {
+        $this->id = $id;
+        $this->descripcion = $desc;
     }
 
     public function __destruct() {
@@ -23,30 +23,10 @@ class Estatus extends Conexion {
         }
     } 
 
-    public function buscarDescripcion() {
-           try {
-            
-            $this->getConexion();
-            $consul = "SELECT descripcion
-            FROM estatus
-            WHERE id_estatus = $this->id
-            ";
-            $exec = $this->conexion->prepare($consul);
-            $exec->execute();
-
-            $consulta = $exec->fetchAll();
-            $this->descripcion = $consulta[0]['descripcion'];
-        } catch (PDOException $e) {
-            echo "Error en la Consulta:" . $e->getMessage();
-        }
-        
-        
-    }
-
     public function buscarTodos() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT * FROM estatus');
+            $exec = $this->conexion->prepare('SELECT id_tipo_solicitud FROM tipo_solicitud');
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -55,10 +35,21 @@ class Estatus extends Conexion {
         }
     }
 
+     public function buscar() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("SELECT descripcion FROM tipo_solicitud WHERE id_tipo_solicitud = '".$this->id."'");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            $this->descripcion=$consulta[0]['descripcion'];
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
     public function insertar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO estatus (descripcion) VALUES('" . $this->descripcion . "')RETURNING id_estatus;");
+            $exec = $this->conexion->prepare("INSERT INTO tipo_solicitud (descripcion) VALUES('" . $this->descripcion . "')RETURNING id_tipo_solicitud;");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -70,9 +61,9 @@ class Estatus extends Conexion {
     public function actualizar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("UPDATE estatus SET descripcion = '" . $this->descripcion . "' WHERE id_estatus='" . $this->id . "';");
+            $exec = $this->conexion->prepare("UPDATE tipo_solicitud SET descripcion = '" . $this->descripcion . "' WHERE id_tipo_solicitud='" . $this->id . "';");
             $exec->execute();
-            echo "Estatus actualizado exitosamente";
+            echo "Tipo de Solicitud actualizado exitosamente";
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -81,9 +72,9 @@ class Estatus extends Conexion {
     public function eliminar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("DELETE FROM estatus WHERE id_estatus = " . $this->id . "");
+            $exec = $this->conexion->prepare("DELETE FROM tipo_solicitud WHERE id_tipo_solicitud = " . $this->id . "");
             $exec->execute();
-            echo "Estatus eliminado exitosamente";
+            echo "Tipo de Solicitud eliminado exitosamente";
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }

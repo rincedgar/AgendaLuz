@@ -19,6 +19,12 @@ class Participantes extends Conexion{
         $this->rol = $rol;
     }
 
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
+    
     public function buscar($idAgenda) {
         try {
             $this->getConexion();

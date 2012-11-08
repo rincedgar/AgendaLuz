@@ -5,7 +5,7 @@
  *
  * @author Edgar Rincon
  */
-class TipoAgenda {
+class TipoAgenda extends Conexion {
 
     protected $agenda;
     protected $dependencia;
@@ -16,6 +16,12 @@ class TipoAgenda {
         $this->dependencia = $dep;
         $this->tipoConsejo = $tipo;
     }
+
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
 
     public function buscar() {
         try {
@@ -35,7 +41,7 @@ class TipoAgenda {
             $exec = $this->conexion->prepare("INSERT INTO tipo_agenda (id_agenda,id_dependencia,id_tipo_consejo) VALUES('" . $this->agenda . "','" . $this->dependencia . "','" . $this->tipoConsejo . "');");
             $exec->execute();
             $consulta = $exec->fetchAll();
-            return $consulta;
+            return 'se inserto'.$this->agenda.$this->dependencia.$this->tipoConsejo;
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }

@@ -6,7 +6,6 @@
  * @author Edgar Rincon
  */
 require_once ('Conexion.class.php');
-include ('clases/Estatus.class.php');
 
 class Punto extends Conexion {
 
@@ -17,13 +16,29 @@ class Punto extends Conexion {
     protected $descripcion;
     protected $observacion;
 
-    function __construct($id) {
-        $this->id = $id;
+    function __construct($id='',$agenda='',$estatus="",$subasunto="",$descripcion="",$observacion="") {
+        $this->id=$id;
+        $this->agenda=$agenda;
+        $this->estatus=$estatus;
+        $this->subasunto=$subasunto;
+        $this->descripcion=$descripcion;
+        $this->observacion=$observacion;
+
+
+    }
+
+    public function __destruct() {
+        foreach ($this as $key => $value) {
+            unset($this->$key);
+        }
+    } 
+
+     public function obtenerDatos() {
         try {
             $this->getConexion();
             $consul = "SELECT *
             FROM punto
-            WHERE id_punto = $id
+            WHERE id_punto = $this->id
             ";
             $exec = $this->conexion->prepare($consul);
             $exec->execute();
@@ -35,6 +50,18 @@ class Punto extends Conexion {
             $this->descripcion=$consulta[0]['descripcion'];
             $this->observacion=$consulta[0]['observacion'];
             
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
+
+    public function insertar(){
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("INSERT INTO punto (id_agenda,id_estatus,descripcion,observacion,id_subasunto) VALUES('" . $this->agenda . "','" . $this->estatus . "','" . $this->descripcion."','" . $this->observacion . "','" . $this->subasunto . "');");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            return $consulta;
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -52,13 +79,11 @@ class Punto extends Conexion {
         return $this->subasunto;
     }
     public function getEstatus() {
-        $estatus= new Estatus($this->estatus);
-        return $estatus->getDescripcion();
+         return $this->estatus;
     }
 
     public function getSubasunto() {
-        $sub = new Subasunto($this->subasunto);
-        return $sub->getDescripcion();
+        return $this->subasunto;
     }
 
     public function getDescripcion() {
@@ -67,6 +92,33 @@ class Punto extends Conexion {
 
     public function getObservacion() {
         return $this->observacion;
+    }
+
+     public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setIdAgenda($agenda) {
+        $this->idAgenda = $agenda;
+    }
+    
+    public function setIdSubasunto($subasunto) {
+        $this->subasunto = $subasunto; 
+    }
+    public function setEstatus($estatus) {
+        $this->estatus = $estatus;
+    }
+
+    public function setSubasunto($subasunto) {
+        $this->subasunto = $subasunto;
+    }
+
+    public function setDescripcion($descripcion) {
+        $this->descripcion = $descripcion;
+    }
+
+    public function setObservacion($observacion) {
+        $this->observacion = $observacion;
     }
 
 }

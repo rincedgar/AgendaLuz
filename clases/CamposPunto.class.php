@@ -1,17 +1,21 @@
 <?php
 
+
 /**
- * Description of Pertenencia
+ * Description of campos_punto
  *
  * @author Edgar Rincon
  */
-class Pertenencia extends Conexion{
-    protected $dependencia;
-    protected $consejero;
+class CamposPunto extends Conexion{
 
-    function __construct($depen='', $conse='') {
-        $this->dependencia = $depen;
-        $this->consejero = $conse;
+    protected $punto;
+    protected $campo;
+    protected $contenido
+
+    function __construct($punto, $campo,$contenido) {
+        $this->punto = $punto;
+        $this->campo = $campo;
+        $this->contenido = $contenido;
     }
 
     public function __destruct() {
@@ -20,10 +24,10 @@ class Pertenencia extends Conexion{
         }
     } 
 
-    public function buscarConsejeros() {
+    public function buscar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("SELECT id_consejero FROM pertenencia WHERE id_dependencia ='" . $this->dependencia. "'");
+            $exec = $this->conexion->prepare("SELECT * FROM campos_punto WHERE id_punto = '".$this->punto."'");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -32,11 +36,10 @@ class Pertenencia extends Conexion{
         }
     }
 
-
-    public function buscar() {
+    public function buscarTodos() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT * FROM pertenencia');
+            $exec = $this->conexion->prepare('SELECT * FROM campos_punto');
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -48,7 +51,7 @@ class Pertenencia extends Conexion{
     public function insertar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO pertenecia (id_dependencia,id_consejero) VALUES('" . $this->dependencia. "','" . $this->consejero. "');");
+            $exec = $this->conexion->prepare("INSERT INTO campos_punto (id_punto,id_campo,contenido) VALUES('" . $this->punto . "','" . $this->campo."','" . $this->contenido. "');");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -57,12 +60,12 @@ class Pertenencia extends Conexion{
         }
     }
 
-    public function actualizar($depen, $conse) {
+    public function actualizar($punto, $campo, $contenido) {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("UPDATE pertenencia SET id_dependencia= '" . $depen . "',id_consejero='" . $conse. "' WHERE id_dependencia='" . $this->dependencia. "' AND id_consejero='" . $this->consejero. "';");
+            $exec = $this->conexion->prepare("UPDATE campos_punto SET id_punto = '" . $punto . "',id_campo='" . $campo . "',contenido='" . $contenido . "' WHERE id_punto='" . $this->punto . "' AND id_campo='" . $this->campo . "';");
             $exec->execute();
-            echo "Pertenencia actualizada exitosamente";
+            echo "Relacion actualizada exitosamente";
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -71,13 +74,14 @@ class Pertenencia extends Conexion{
     public function eliminar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("DELETE FROM pertenencia WHERE id_dependencia='" . $this->dependencia. "' AND id_consejero='" . $this->consejero. "'");
+            $exec = $this->conexion->prepare("DELETE FROM campos_punto WHERE id_punto='" . $this->punto . "' AND id_campo='" . $this->campo . "'");
             $exec->execute();
-            echo "Pertenencia eliminada exitosamente";
+            echo "Relacion eliminada exitosamente";
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
     }
+
 }
 
 ?>

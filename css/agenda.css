@@ -20,7 +20,10 @@
 .asuntos .btn {
 	margin: 1%;
 }
-
+.modal.large{
+    width: 780px;
+    margin-left: -390px; /* - width/2 */
+}
 .opciones .btn {
 	margin: 5% 0 0;
 	padding: 5px 0 5px;
