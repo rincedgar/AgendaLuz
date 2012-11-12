@@ -51,7 +51,7 @@ for ($i = 0; $i < count($asuntos); $i++) {
             for ($k = 0; $k < count($idPuntos); $k++) {                 //Puntos
                 $punto = new Punto($idPuntos[$k]['id_punto']);
                 $punto->obtenerDatos();                
-                if ($punto->getIdSubasunto() == $subasunto->getId()) {//si el punto pertenece al subasunto
+                if ($punto->getSubasunto() == $subasunto->getId()) {//si el punto pertenece al subasunto
                     ?>
                     <div class="row punto" id="<?php echo "{$idPuntos[$k]['id_punto']}" ?>">
                         <div class="span6">

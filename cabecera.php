@@ -12,16 +12,17 @@
         <link href="./css/bootstrap.css" rel="stylesheet">
         <link href="./css/bootstrap-responsive.css" rel="stylesheet">
         <link href="./css/datepicker.css" rel="stylesheet">
-        <link href="./css/bootstrap-wysihtml5.css" rel="stylesheet">
         <link href="./css/chosen.css" rel="stylesheet">
-        <link href="./css/jquery.fancybox.css" rel="stylesheet">
+        <link href="./colorbox/colorbox.css" rel="stylesheet" media="screen">
+
         <!-- JavaScrips -->
         <script src="./js/jquery.js"></script>
         <script src="./js/bootstrap-datepicker.js"></script>
         <script src="./js/utilidades.js"></script>
         <script src="./js/bootstrap.js"></script>
         <script src="./js/chosen.jquery.js"></script>
-        <script src="./js/jquery.fancybox.pack.js"></script>
+        <script src="./js/jquery.colorbox.js"></script>
+        
         
     </head>
 

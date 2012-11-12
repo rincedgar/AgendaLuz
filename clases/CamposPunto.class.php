@@ -10,9 +10,9 @@ class CamposPunto extends Conexion{
 
     protected $punto;
     protected $campo;
-    protected $contenido
+    protected $contenido;
 
-    function __construct($punto, $campo,$contenido) {
+    function __construct($punto='', $campo='',$contenido='') {
         $this->punto = $punto;
         $this->campo = $campo;
         $this->contenido = $contenido;
@@ -82,6 +82,29 @@ class CamposPunto extends Conexion{
         }
     }
 
+    public function getPunto() {
+        return $this->punto;
+    }
+
+    public function getCampo() {
+            return $this->campo;
+    }
+
+    public function getContenido() {
+        return $this->contenido;
+    }
+
+    public function setPunto($punto) {
+        $this->punto=$punto;
+    }
+
+    public function setCampo($campo) {
+        $this->campo= $campo;
+    }
+
+    public function setContenido($contenido) {
+        $this->contenido = $contenido;
+    }
 }
 
 ?>

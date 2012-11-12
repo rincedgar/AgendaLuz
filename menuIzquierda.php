@@ -18,6 +18,7 @@
             <li class="nav-header">
                 Configuraci&oacute;n
             </li>
+
             <li>
                 <a href="#"><i class="icon-user"> </i>Usuario</a>
             </li>

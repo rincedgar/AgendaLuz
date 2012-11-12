@@ -79,7 +79,7 @@ class Agenda extends Conexion {
                 JOIN tipo_agenda ta on ta.id_agenda=a.id_agenda 
                 JOIN tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo 
                 JOIN dependencias d on d.id_dependencia=ta.id_dependencia 
-                WHERE a.id_agenda='".$this->idAgenda."'' 
+                WHERE a.id_agenda='".$this->idAgenda."'
                 GROUP BY a.id_agenda, a.fecha, d.descripcion, tc.descripcion, tc.siglas,d.id_dependencia,tc.id_tipo_consejo 
                 ORDER BY a.fecha");
 
@@ -131,12 +131,12 @@ class Agenda extends Conexion {
 
         try {
             $this->getConexion();
-            $anio = $anio . '-01-01';
-            $consul = "select count(a.id_agenda) as consecutivo
-            from tipo_agenda ta
+            $anio = $anio.'-01-01';
+            $consul = "SELECT count(a.id_agenda)as consecutivo
+            FROM tipo_agenda ta
             join agenda a on a.id_agenda=ta.id_agenda
             join tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo
-            where a.fecha between '".$anio."' AND '".$fecha."' AND ta.id_tipo_consejo='".$consejo."' AND ta.id_dependencia='".$dependencia."'";
+            WHERE a.fecha between '".$anio."' AND '".$fecha."' AND ta.id_tipo_consejo='".$consejo."' AND ta.id_dependencia='".$dependencia."'";
             $exec = $this->conexion->prepare($consul);
             $exec->execute();
 

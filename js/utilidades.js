@@ -1,6 +1,8 @@
 
 
 $(document).ready(function() {
+
+  
  
     $('#fecha').datepicker().on('changeDate', function(ev){
             var dias = $('#dia').val();
@@ -11,13 +13,15 @@ $(document).ready(function() {
             x.setFullYear(dia[2],dia[1],dia[0]);
             var y=new Date();
             y.setFullYear(hoy[2],hoy[1],hoy[0]);
+            $('#oculto').slideUp('fast');  
             if (x<y)
                 {
-                    $('#errorFecha').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(5000);});
+                    $('#errorFecha').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(1000);});
                 }
             else
             {
-                $('#oculto').slideDown('slow');        
+                $('#oculto').removeClass('hidden');
+                $('#oculto').slideDown('fast');        
                 $('#subir').removeClass('hidden');
             }
             $('#fecha').datepicker('hide');
@@ -25,13 +29,9 @@ $(document).ready(function() {
     
     $('.chzn-select').chosen();
     
-    $('.Modal').fancybox({
-        type: 'ajax',
-        autoSize:true,
-        autoResize:true,
-        autoCenter:true,
-        scrollOutside:true
-    });
+    /*$('.Modal').colorbox({
+
+    });*/
 
     function resetForm(id) {
         $('#'+id).each(function(){
@@ -40,17 +40,19 @@ $(document).ready(function() {
     }
 
     $('#regreso').click(function(){       
-        $('#aread').slideDown('slow'); 
-        $('#aread').removeClass('hidden');
+        $('#resul_solicitud').slideDown('fast'); 
+        $('#resul_solicitud').removeClass('hidden');
         $('#pdetalle').hide('slow');
-        $('#regreso').hide('slow'); 
+        $('#regreso').hide('slow');
+        $('#detalle').removeClass('hidden'); 
     });
     
     $('#detalle').click(function(){       
         $('#pdetalle').slideDown('slow'); 
         $('#pdetalle').removeClass('hidden');
-        $('#aread').hide('slow');
+        $('#resul_solicitud').hide('slow');
         $('#regreso').show();
+        $('#detalle').addClass('hidden');
     });
     
     $('.typeahead').typeahead();
@@ -74,23 +76,66 @@ $(document).ready(function() {
             });          
     });
     
-    $('#agregar_punto').click(function(e){
-        
+    $('#agregar_punto').unbind("click").click(function (e){   
         var idAsunto = $('#sel_asuntos').val();
         if(idAsunto!='0'){
             var url = './nuevoPunto.php?sub='+idAsunto;
-            $('#agregar_punto').attr('href',url);
-            $('#agregar_punto').fancybox({
-                type: 'ajax',
+           // $('#agregar_punto').attr('href',url);
+            $.colorbox({
+                //html:"<h1>Welcome</h1>"
+                type:'ajax',
+                overlayClose:false, 
+                escKey:false,
+                href:url,
+                scrolling:false,
+                onComplete: function() {
+                    $('#cboxClose').remove();
+                    $.colorbox.resize();
+                },
+                onClosed:function(datos){
+                    var datos='operacion=3';
+                    $.ajax({
+                        type: 'POST',
+                        dataType: "html",
+                        url: 'controladores/controlador_nuevoPunto.php',
+                        data: datos,
+                        success: function(f){
+                            parent.$.colorbox.close();
+                        }
+                    });          
+                }
+            });
+           /* $('#agregar_punto').fancybox({
                 fitToView:true,
                 autoSize:true,
                 autoCenter:true,
+                closeBtn: false,
+                type: 'ajax',
+                openEffect:'none',
+                closeEffect:'none',
+                beforeClose:  function(datos){
+                    var datos='operacion=3';
+                    $.ajax({
+                        type: 'POST',
+                        dataType: "html",
+                        url: 'controladores/controlador_nuevoPunto.php',
+                        data: datos,
+                        success: function(datos){
+                            parent.$.fancybox.close();
+                        }
+                    });          
+                }
+            });*/
 
-            });
+
         }
         else{
             alert('Debe seleccionar una dependencia');
         }
+    });
+
+    $('#salirModal').unbind('click').click(function (e){ 
+        parent.$.colorbox.close();
     });
     
     $('#sel_solicitud').change(function (e){ //Siguiente Punto --Mostrar tabla
@@ -103,40 +148,36 @@ $(document).ready(function() {
                 success: function(datos){
                     $('#resul_solicitud').empty();
                     $('#resul_solicitud').append(datos);
+                    $.colorbox.resize();
                 }
             });          
     });
     
-     $('#siguientePunto').click(function (e){ //Siguiente Punto -- Guardar en arreglo temp
+     $('#siguientePunto').unbind("click").click(function (e){ //Siguiente Punto -- Guardar en arreglo temp
         var datos='operacion=1&'+$('#form').serialize();
-        var punto = $("#desc_punto").val();
-        var detalle = $("#det_punto").val();
-        if(punto != ''){
-            $.ajax({
-                type: 'POST',
-                dataType: "json",
-                url: 'controladores/controlador_nuevoPunto.php',
-                data: datos,
-                success: function(datos){
-                    $('#aread').empty().html('<textarea class="textarea" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="width: 512px; height: 200px"></textarea>');
-                    $('#areadt').empty().html('<textarea class="textarea" id="det_punto" name="det_punto" placeholder="Escriba la descripción del punto ..." style="width: 512px; height: 200px"></textarea>');
-                    $('#pdescripcion').slideDown('slow'); 
-                    $('#pdescripcion').removeClass('hidden');
-                    $('#pdetalle').hide('slow');
-                    $('#regreso').hide('slow'); 
-                    $('#exitoPunto').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(3000);});
-                },
-                error: function (e){
-                    $('#errorPunto').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(3000);});
-                }
-            });          
-        }
-        else {
-            alert("Debe escribir una descripcion del punto");
-        }
+        $.ajax({
+            type: 'POST',
+            dataType: "html",
+            url: 'controladores/controlador_nuevoPunto.php',
+            data: datos,
+            success: function(datos){
+                $("#sel_solicitud option[value="+'otro'+"]").attr("selected",true);
+                $('#resul_solicitud').empty().html('<label class="control-label" >Descripción:</label><div class="controls" id="aread"><textarea class="textarea span5" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="height: 200px"></textarea></div> ');
+                $('#areadt').empty().html('<textarea class="textarea" id="det_punto" name="det_punto" placeholder="Escriba la descripción del punto ..." style="width: 512px; height: 200px"></textarea>');
+                $('#resul_solicitud').slideDown('slow'); 
+                $('#resul_solicitud').removeClass('hidden');
+                $('#pdetalle').hide('slow');
+                $('#regreso').hide('slow'); 
+                $('#exitoPunto').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(3000);});
+                parent.$.colorbox.resize(); 
+            },
+            error: function (e){
+                $('#errorPunto').removeClass('hidden').fadeIn(1000, function callback() {$(this).fadeOut(3000);});
+            }
+        });          
     });     
     
-    $('#guardarPunto').click(function (e){ //Siguiente Punto --Mostrar tabla
+    $('#guardarPunto').unbind("click").click(function (e){ //Siguiente Punto --Mostrar tabla
         var datos='operacion=2&'+$('#form').serialize();
         var punto = $("#desc_punto").val();       
         if(punto != ''){
@@ -146,8 +187,8 @@ $(document).ready(function() {
                 url: 'controladores/controlador_nuevoPunto.php',
                 data: datos,
                 success: function(datos){
-                 
-                    parent.$.fancybox.close();    
+                
+                    parent.$.colorbox.close();    
                     $("#tablaPuntos").empty();
                     $('#tablaPuntos').append(datos);
                     $('#tablaPuntos').removeClass('hidden'); 
@@ -162,12 +203,12 @@ $(document).ready(function() {
             
     });
 
-    $('#cancelarAgenda').click(function (e){ //Siguiente Punto --Mostrar tabla
+    $('#cancelarAgenda').unbind("click").click(function (e){ //Siguiente Punto --Mostrar tabla
         var datos='operacion=3&'+$('#form').serialize();
             $.ajax({
                 type: 'POST',
                 dataType: "html",
-                url: 'controladores/controlador_nuevoAgenda.php',
+                url: 'controladores/controlador_nuevaAgenda.php',
                 data: datos,
                 success: function(datos){
                  window.location='bienvenido.php'; 
@@ -188,7 +229,7 @@ $(document).ready(function() {
                     $("#tablaPuntos").empty();
                     $('#resultado').append(datos);
                     if($('#resul').attr('name')=='exito'){
-                        window.location='nuevaAgenda.php';
+                    window.location='nuevaAgenda.php';
                     }
                 }
             });
@@ -196,12 +237,12 @@ $(document).ready(function() {
 
 
    
-    $('.b_observacion').click(function (e){
+    $('.b_observacion').unbind("click").click(function (e){
          var id = $(this).attr('id').split('_');
          $('#obs_'+id[2]).toggle();
     });
     
-    $('.b_decision').click(function (e){
+    $('.b_decision').unbind("click").click(function (e){
          var id = $(this).attr('id').split('_');
          $('#dec_'+id[2]).toggle();
     });

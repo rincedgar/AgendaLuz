@@ -13,18 +13,18 @@ class Punto extends Conexion {
     protected $agenda;
     protected $estatus;
     protected $subasunto;
-    protected $descripcion;
-    protected $observacion;
+    protected $solicitud;
+    protected $detalle;
+    protected $otro;
 
-    function __construct($id='',$agenda='',$estatus="",$subasunto="",$descripcion="",$observacion="") {
+    function __construct($id='',$agenda='',$estatus="",$subasunto="",$solicitud='',$detalle='',$otro='') {
         $this->id=$id;
         $this->agenda=$agenda;
         $this->estatus=$estatus;
         $this->subasunto=$subasunto;
-        $this->descripcion=$descripcion;
-        $this->observacion=$observacion;
-
-
+        $this->solicitud=$solicitud;
+        $this->detalle=$detalle;
+        $this->otro=$otro;
     }
 
     public function __destruct() {
@@ -47,9 +47,9 @@ class Punto extends Conexion {
             $this->agenda=$consulta[0]['id_agenda'];
             $this->estatus=$consulta[0]['id_estatus'];
             $this->subasunto=$consulta[0]['id_subasunto'];
-            $this->descripcion=$consulta[0]['descripcion'];
-            $this->observacion=$consulta[0]['observacion'];
-            
+            $this->solicitud=$consulta[0]['id_tipo_solicitud'];
+            $this->detalle=$consulta[0]['detalle'];
+            $this->otro=$consulta[0]['otro'];
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -58,10 +58,13 @@ class Punto extends Conexion {
     public function insertar(){
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO punto (id_agenda,id_estatus,descripcion,observacion,id_subasunto) VALUES('" . $this->agenda . "','" . $this->estatus . "','" . $this->descripcion."','" . $this->observacion . "','" . $this->subasunto . "');");
+            if($this->solicitud!='NULL')
+                $exec = $this->conexion->prepare("INSERT INTO punto (id_agenda,id_estatus,id_subasunto,id_tipo_solicitud,detalle,otro) VALUES('" . $this->agenda . "','" . $this->estatus . "','" . $this->subasunto . "','" . $this->solicitud . "','" . $this->detalle . "'," . $this->otro . ") RETURNING id_punto;");
+            else
+                $exec = $this->conexion->prepare("INSERT INTO punto (id_agenda,id_estatus,id_subasunto,id_tipo_solicitud,detalle,otro) VALUES('" . $this->agenda . "','" . $this->estatus . "','" . $this->subasunto . "'," . $this->solicitud . ",'" . $this->detalle . "'," . $this->otro . ") RETURNING id_punto;");
             $exec->execute();
             $consulta = $exec->fetchAll();
-            return $consulta;
+            return $consulta[0]['id_punto'];
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -74,10 +77,7 @@ class Punto extends Conexion {
     public function getIdAgenda() {
         return $this->idAgenda;
     }
-    
-    public function getIdSubasunto() {
-        return $this->subasunto;
-    }
+
     public function getEstatus() {
          return $this->estatus;
     }
@@ -86,25 +86,25 @@ class Punto extends Conexion {
         return $this->subasunto;
     }
 
-    public function getDescripcion() {
-        return $this->descripcion;
+    public function getSolicitud() {
+        return $this->solicitud;
     }
 
-    public function getObservacion() {
-        return $this->observacion;
+    public function getDetalle() {
+        return $this->detalle;
     }
-
      public function setId($id) {
         $this->id = $id;
+    }
+
+    public function getOtro() {
+        return $this->otro;
     }
 
     public function setIdAgenda($agenda) {
         $this->idAgenda = $agenda;
     }
     
-    public function setIdSubasunto($subasunto) {
-        $this->subasunto = $subasunto; 
-    }
     public function setEstatus($estatus) {
         $this->estatus = $estatus;
     }
@@ -113,14 +113,17 @@ class Punto extends Conexion {
         $this->subasunto = $subasunto;
     }
 
-    public function setDescripcion($descripcion) {
-        $this->descripcion = $descripcion;
+    public function setSolicitud($solicitud) {
+        $this->solicitud = $solicitud;
     }
 
-    public function setObservacion($observacion) {
-        $this->observacion = $observacion;
+    public function setDetalle($detalle) {
+        $this->detalle = $detalle;
     }
 
+    public function setOtro($otro) {
+        $this->otro = $otro;
+    }
 }
 
 ?>

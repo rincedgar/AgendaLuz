@@ -46,6 +46,7 @@ class Campo extends Conexion {
             echo "Error en la Consulta:" . $e->getMessage();
         }
     }
+    
     public function insertar() {
         try {
             $this->getConexion();

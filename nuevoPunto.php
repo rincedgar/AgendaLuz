@@ -38,12 +38,17 @@ $solicitudes = $sol->buscarTodos();
                     </div>              
                 </div>
                 <input class='hidden' id='subasunto' name='subasunto' value=<?php echo $_GET['sub'];?>></input>
+            
+
+                <!--CARGA DE TIPOS DE SOLICITUD-->
                 <div class="control-group" id="resul_solicitud">
                     <label class="control-label" >Descripción:</label>
                     <div class="controls" id="aread">
                         <textarea class="textarea span5" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="height: 200px"></textarea>
                     </div>         
-                </div>                           
+                </div> 
+
+
                 <input type="button" class="btn btn-primary" id="detalle" value="Detalle"/> 
                 <div class="control-group hidden" id="pdetalle">
                     <label class="control-label" >Detalles:</label>
@@ -67,5 +72,5 @@ $solicitudes = $sol->buscarTodos();
 </div>
 <div class="modal-footer">    
     <button  class="btn btn-large btn-primary" id="guardarPunto" name="guardarPunto">Guardar</button>
-    <a href="#" class="btn btn" data-dismiss="modal" >Salir</a>
+    <button id="salirModal" class="btn" >Salir</botton>
 </div>

@@ -8,11 +8,15 @@ include ('../clases/TipoAgenda.class.php');
 include ('../clases/Participantes.class.php');
 include ('../clases/Punto.class.php');
 include ('../clases/Rol.class.php');
+include ('../clases/Campo.class.php');
+include ('../clases/CamposPunto.class.php');
+include ('../clases/CampoSolicitud.class.php');
 $opcion = $_POST['operacion'];
 session_start();
  
 switch ($opcion) {
-	case '1':		//Cargar select dependientes
+ //**********************************************************************************************************SELECTS DEPENDIENTES	
+    case '1':
 		$pertenecen = new Pertenencia ($_POST['dependencia'],'');
 		$idConsejeros = $pertenecen->buscarConsejeros();
         $rol = new Rol('','');
@@ -45,20 +49,50 @@ switch ($opcion) {
         }
 		
 		break;
-	case '2':       //Guardar agenda
-        if(($_POST['dia']!='')&&($_POST['sel_dependencia']!='')&&($_POST['sel_tipo']!='')&&(isset($_SESSION['padres']))){
+
+ //**********************************************************************************************************GUARDAR AGENDA
+	case '2':      
+        if(($_POST['dia']!='')&&($_POST['sel_dependencia']!='')&&($_POST['sel_tipo']!='')&&(isset($_SESSION['puntos']))){
             
             $agenda = new Agenda('',$_POST['dia']);
             $idAgenda = $agenda->insertar();
             $tipoAgenda = new tipoAgenda($idAgenda,$_POST['sel_dependencia'],$_POST['sel_tipo']);
             $tipoAgenda->insertar();
 
-            $punto = new punto('',$idAgenda,1,'','','');
-            for ($i=0; $i < count($_SESSION['padres']) ; $i++) { 
-                $punto->setSubasunto($_SESSION['padres'][$i]['id']);
-                $punto->setDescripcion($_SESSION['padres'][$i]['descripcion']);
-                $punto->setObservacion($_SESSION['padres'][$i]['detalle']);
-                $punto->insertar();
+            $punto = new punto('',$idAgenda,'1','','');
+            $cp = new CamposPunto('','','');
+            for ($i=0; $i < count($_SESSION['puntos']) ; $i++) { 
+                $punto->setSubasunto($_SESSION['puntos'][$i]['id']);
+                if ($_SESSION['puntos'][$i]['otro']=='false') {
+                    $punto->setSolicitud($_SESSION['puntos'][$i]['id_tipo_solicitud']);
+                    $punto->setOtro('false');
+                    if (isset($_SESSION['puntos'][$i]['detalle'])) {
+                        $punto->setDetalle($_SESSION['puntos'][$i]['detalle']);
+                    }
+                    $idPunto = $punto->insertar();
+                    $cs = new CampoSolicitud($_SESSION['puntos'][$i]['id_tipo_solicitud'],'');
+                    $idCampos= $cs->buscarCampos();
+                    $campo = new Campo('','');
+                    $cp->setPunto($idPunto);
+                    for ($j=0; $j < count($idCampos); $j++) { 
+                        $campo->setId($idCampos[$j]['id_campo']); $campo->buscar();
+                        $cp->setCampo($idCampos[$j]['id_campo']);
+                        $cp->setContenido($_SESSION['puntos'][$i][$campo->getDescripcion()]);
+                        $cp->insertar();
+                    }
+                } 
+                else{
+                    if (isset($_SESSION['puntos'][$i]['detalle'])) {
+                        $punto->setDetalle($_SESSION['puntos'][$i]['detalle']);
+                    }
+                    $punto->setOtro('true');
+                    $punto->setSolicitud('NULL');
+                    $idPunto = $punto->insertar();
+                    $cp->setPunto($idPunto);
+                    $cp->setCampo('7');
+                    $cp->setContenido($_SESSION['puntos'][$i]['descripcion']);
+                    $cp->insertar();
+                }                          
             }
 
             $rol = new Rol('','');
@@ -87,17 +121,17 @@ switch ($opcion) {
                     }
                 }   
             }
-            if(isset($_SESSION['padres']))
+            if(isset($_SESSION['puntos']))
             {
-                session_unset($_SESSION['padres']);
+                unset($_SESSION['puntos']);
             }
             if(isset($_SESSION['sub']))
             {
-                session_unset($_SESSION['sub']);
+                unset($_SESSION['sub']);
             }
             if(isset($_SESSION['npuntos']))
             {
-                session_unset($_SESSION['npuntos']);
+                unset($_SESSION['npuntos']);
             }
             echo '<div id="resul" name="exito" class="alert alert-success">
                         <button type="button" class="close" data-dismiss="alert">×</button>
@@ -110,14 +144,16 @@ switch ($opcion) {
                 <strong>Ops! Ha ocurrido un problema</strong>  Verifique que todos los datos esten completos
             </div>';}
 		break;
+
+ //**********************************************************************************************************CANCELAR AGENDA
 	case '3':
 			//Limpiar arrays temporales
-			if(isset($_SESSION['padres']))
-				session_unset($_SESSION['padres']);
+			if(isset($_SESSION['puntos']))
+				unset($_SESSION['puntos']);
 			if(isset($_SESSION['sub']))
-				session_unset($_SESSION['sub']);
+				unset($_SESSION['sub']);
 			if(isset($_SESSION['npuntos']))
-				session_unset($_SESSION['npuntos']);
+				unset($_SESSION['npuntos']);
 		break;
 
 }
