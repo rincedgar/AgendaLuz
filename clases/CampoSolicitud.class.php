@@ -6,6 +6,8 @@
  *
  * @author Edgar Rincon
  */
+require_once ('Conexion.class.php');
+
 class CampoSolicitud extends Conexion{
 
     protected $tipo_solicitud;

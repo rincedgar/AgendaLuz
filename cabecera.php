@@ -53,14 +53,12 @@
                             <h2 style="color:#00539F">Facultad Experimental de Ciencias</h2>
                         </div>
                         <div class="span3 hidden-phone"><img src="./img/logo_fec.png" width="100" height="100" alt="Logo FEC">
-                            <br />
                         </div>
                     </div>
                     <div class="progress span12 hidden-phone" style="margin-left: 0">
                         <div class="bar" style="width: 100%;"></div>
                     </div>
                 </div>
-                <br />
                 <!-- Barra Navegacion ================================================== -->
                 <div class="navbar navbar-fixed-top hidden-desktop" style="position:fixed;">
                     <div class="navbar-inner">
@@ -83,46 +81,11 @@
                 </div>
             </header>
             <!-- Menu Horizontal ================================================== -->
-            <div id="menuh">
-                <div class="hidden-phone row">
-                    <ul class="nav nav-pills span8">
-                        <li class="active">
-                            <a id="op1" href="#">Opcion1</a>
-                        </li>
-                        <li>
-                            <a id="op2" href="#">Opcion2</a>
-                        </li>
-                        <li>
-                            <a id="op3" href="#">Opcion3</a>
-                        </li>
-                        <li>
-                            <a id="op4" href="#">Opcion4</a>
-                        </li>
-                    </ul>
-                    <div class="span3 visible-desktop">
-                        <form class="form-search">
-                            <div class="input-append">
-                                <input type="text" class="search-query" placeholder="Busqueda en Agendas">
-                                <button type="submit" class="btn">Buscar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="visible-phone">
-                    <ul class="nav nav-tabs nav-stacked">
-                        <li class="active">
-                            <a id="opp1" href="#"><strong>Inicio</strong></a>
-                        </li>
-                        <li>
-                            <a id="opp2" href="#">Opcion2</a>
-                        </li>
-                        <li>
-                            <a id="opp3" href="#">Opcion3</a>
-                        </li>
-                        <li>
-                            <a id="opp4" href="#">Opcion4</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <div id="menuh" class="navbar-inner">
+                <h4 class="pull-left text-info">Bienvenido Sr. Edgar Rincon</h4>
+                <form class="navbar-search pull-right">
+                    <input type="text" class="search-query" placeholder="Buscar">
+                </form>
+
+            </div> <br/>
             

@@ -13,7 +13,8 @@ include ('../clases/CamposPunto.class.php');
 include ('../clases/CampoSolicitud.class.php');
 $opcion = $_POST['operacion'];
 session_start();
- 
+//POST: opeacion, dia, dependencia, sel_dependencia, sel_tipo, sel_[roles], sel_asuntos
+
 switch ($opcion) {
  //**********************************************************************************************************SELECTS DEPENDIENTES	
     case '1':
@@ -122,17 +123,13 @@ switch ($opcion) {
                 }   
             }
             if(isset($_SESSION['puntos']))
-            {
                 unset($_SESSION['puntos']);
-            }
+            if(isset($_SESSION['contador']))
+                unset($_SESSION['contador']);
             if(isset($_SESSION['sub']))
-            {
                 unset($_SESSION['sub']);
-            }
             if(isset($_SESSION['npuntos']))
-            {
                 unset($_SESSION['npuntos']);
-            }
             echo '<div id="resul" name="exito" class="alert alert-success">
                         <button type="button" class="close" data-dismiss="alert">×</button>
                     <strong>Excelente!</strong> Agenda guardada con exito!
@@ -141,7 +138,7 @@ switch ($opcion) {
         else{
             echo '<div id="resul" name="fallo" class="alert alert-error">
                 <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Ops! Ha ocurrido un problema</strong>  Verifique que todos los datos esten completos
+                <strong>Ups! Ha ocurrido un problema</strong>  Verifique que todos los datos esten llenos
             </div>';}
 		break;
 
@@ -154,6 +151,8 @@ switch ($opcion) {
 				unset($_SESSION['sub']);
 			if(isset($_SESSION['npuntos']))
 				unset($_SESSION['npuntos']);
+            if(isset($_SESSION['contador']))
+                unset($_SESSION['contador']);
 		break;
 
 }

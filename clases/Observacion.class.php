@@ -14,8 +14,7 @@ class Observacion extends Conexion {
     protected $idConsejero;
     protected $idPunto;
 
-    function __construct($id, $punto, $desc, $con) {
-        $this->id = $id;
+    function __construct($con, $punto, $desc) {
         $this->descripcion = $desc;
         $this->idConsejero = $con;
         $this->idPunto = $punto;
@@ -30,10 +29,11 @@ class Observacion extends Conexion {
     public function buscar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT * FROM observaciones');
+            $exec = $this->conexion->prepare("SELECT descripcion FROM observaciones WHERE id_punto = '".$this->idPunto."' AND id_consejero = '".$this->idConsejero."'");
             $exec->execute();
             $consulta = $exec->fetchAll();
-            return $consulta;
+            if(count($consulta)!=0)
+            $this->descripcion = $consulta[0]['descripcion'];
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -42,7 +42,7 @@ class Observacion extends Conexion {
     public function insertar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO observaciones (descripcion,id_consejero,id_punto) VALUES('" . $this->descripcion . "','" . $this->idConsejero . "','" . $this->idPunto . "')RETURNING id_observacion;");
+            $exec = $this->conexion->prepare("INSERT INTO observaciones (id_consejero, id_punto, descripcion) VALUES('".$this->idConsejero."','".$this->idPunto."','".$this->descripcion."');");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -54,7 +54,7 @@ class Observacion extends Conexion {
     public function actualizar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("UPDATE observaciones SET descripcion = '" . $this->descripcion . "',id_cosejero='" . $this->idConsejero . "',id_punto'" . $this->idPunto . "' WHERE id_observacion='" . $this->id . "';");
+            $exec = $this->conexion->prepare("UPDATE observaciones SET descripcion = '" . $this->descripcion . "' WHERE id_cosejero='" . $this->idConsejero . "' AND id_punto'" . $this->idPunto . "';");
             $exec->execute();
             echo "Estatus actualizado exitosamente";
         } catch (PDOException $e) {
@@ -65,32 +65,24 @@ class Observacion extends Conexion {
     public function eliminar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("DELETE FROM estatus WHERE id_estatus = " . $this->id . "");
+            $exec = $this->conexion->prepare("DELETE FROM observaciones WHERE id_cosejero='" . $this->idConsejero . "' AND id_punto'" . $this->idPunto . "';");
             $exec->execute();
-            echo "Estatus eliminado exitosamente";
+            echo "obsevacion eliminado exitosamente";
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
-    }
-
-    public function getId() {
-        return $this->id;
     }
 
     public function getDescripcion() {
         return $this->descripcion;
     }
 
-    public function getIdConsjero() {
+    public function getIdConsejero() {
         return $this->idConsejero;
     }
 
     public function getIdPunto() {
         return $this->idPunto;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
     }
 
     public function setDescripcion($desc) {

@@ -6,7 +6,11 @@ include ('clases/Asunto.class.php');
 include ('clases/Subasunto.class.php');
 include ('clases/Participantes.class.php');
 include ('clases/Consejero.class.php');
+include ('clases/TipoSolicitud.class.php');
+include ('clases/CamposPunto.class.php');
 include ('clases/Estatus.class.php');
+include ('clases/Observacion.class.php');
+include ('clases/Campo.class.php');
 include ('clases/Rol.class.php');
 include ('menuIzquierda.php');
 $idAgenda = $_GET['id'];
@@ -35,6 +39,8 @@ $consecutivo = $agenda->consecutivo($resul[0]['id_dependencia'], $resul[0]['id_t
 <?php
 $asun = new Asunto('', '');
 $asuntos = $asun->buscarTodos();
+$consejero = new Consejero(1,'','','','');
+$consejero->buscar();
 $idPuntos = $agenda->obtenerPuntos();
 for ($i = 0; $i < count($asuntos); $i++) {
     $idSubasuntos = $asun->obtenerSubasuntos($asuntos[$i]['id_asunto']); //subasuntos que estan dentro de este asunto
@@ -58,86 +64,121 @@ for ($i = 0; $i < count($asuntos); $i++) {
                             <span class="badge badge-info">Punto <?php echo $k + 1; ?></span>
                             <br />
                             <br />
-                            <h4>Descripción:</h4>
-                            <h5> <?php echo $punto->getDescripcion(); ?></h5>
+                            <?php
+                                $cp = new CamposPunto('','','');
+
+                                if($punto->getSolicitud()==NULL){
+                                    $cp->setPunto($punto->getId());
+                                    $data = $cp->buscar();
+                                    echo'<h4>Asunto:</h4>
+                                        <p>'.$data[0]['contenido'].'</p>';
+                                }
+                                else{
+                                    $ts = new TipoSolicitud($punto->getSolicitud(),'');
+                                    $ts->buscar();
+                                    echo '<h4>'.$ts->getDescripcion().':</h4>';
+                                    $cp->setPunto($punto->getId());
+                                    $data = $cp->buscar();
+                                    $campo = new Campo('','');
+                                    echo '<p>';
+                                    for ($i=0; $i < count($data); $i++) { 
+                                        $campo->setId($data[$i]['id_campo']);
+                                        $campo->buscar();
+                                        echo ' <b>'.$campo->getDescripcion().':</b> '.$data[$i]['contenido'];
+
+                                    }
+                                    echo '</p>';
+
+                                }
+                            ?>
                             <br />
                             <div class="span6" style="margin-left: 0px">
                                 <?php
-                                if($punto->getObservacion()!='')
-                                    echo '<h4>Observaciones:</h4>
-                                <p>'.$punto->getObservacion().'</p>';
-                                    ?>
+                                if($punto->getDetalle()!='')
+                                    echo '<h4>Detalles:</h4>
+                                <p>'.$punto->getDetalle().'</p>';
                                 
-                                <?php echo '<div id="obs_'.$idPuntos[$k]['id_punto'].'" hidden="hidden">';?>
-                                    <form class="well form">
-                                        <h4>Usuario1:</h4>
-                                        <br />
-                                        <textarea class="span5" placeholder="Inserte su observaci&oacute;n..."></textarea>
-                                        <button type="reset" class="btn">
-                                            Limpiar
-                                        </button>
-                                        <button id="cerrar" class="btn pull-right">
-                                            Cancelar
-                                        </button>
-                                        <button type="submit" class="btn btn-primary pull-right">
-                                            Agregar
-                                        </button>
-
-                                    </form>
+                                ?>
+                                <?php 
+                                        $obs = new Observacion ($consejero->getId(),$punto->getId(),'');
+                                        $obs->buscar();
+                                        $o = $obs->getDescripcion();
+                                        echo'<div id="observaciones_'.$punto->getId().'">';
+                                        if($o!=''){   
+                                            echo '<div class="well">
+                                                    <h5>Comentarios:</h5>
+                                                    <b>'.$consejero->getNombre().' '.$consejero->getApellido().': </b>'.$obs->getDescripcion().
+                                                '</div>';
+                                        }
+                                        echo '</div>';
+                                ?>
+                                <?php echo '<div id="obs_'.$punto->getId().'" hidden="hidden">
+                                    <div class="well form">
+                                        <div id="t_area_'.$punto->getId().'">';
+                                            echo '<h4>Comentarios de '.$consejero->getNombre().' '.$consejero->getApellido().':</h4>'?>
+                                            <br />
+                                            <textarea <?php echo'id="observacion_'.$punto->getId().'" name="observacion_'.$punto->getId().'"';?>class="span5" placeholder="Inserte su observaci&oacute;n..."></textarea>
+                                            <button type="reset" class="btn">Limpiar</button>
+                                            <button id="cerrar" class="btn pull-right">Cancelar</button>
+                                            <button <?php echo'id="comentar_'.$punto->getId().'" name="comentar_'.$punto->getId().'"';?>type="submit" class="btn btn-primary pull-right comentar"><i class="icon-comment icon-white"></i> Comentar</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <?php echo '<div id="dec_'.$idPuntos[$k]['id_punto'].'" class="well" hidden="hidden">';?>
-                                    <form class=" form-inline">
-                                    <?php echo '<select id="select_'.$idPuntos[$k]['id_punto'].'" class="chzn-select">';?>
-                                            <option>Aprobado</option>
-                                            <option> Negado</option>
-                                            <option>Diferido</option>
-                                            <option> Informado</option>
-                                            <option> Otro</option>
+                                <?php echo '<div id="dec_'.$punto->getId().'" class="well" hidden="hidden">';
+                                    echo '<div class=" form-inline" id="formd_'.$punto->getId().'">';?>
+                                    <?php 
+                                        echo '<select id="decidir_'.$punto->getId().'" class="chzn-select">';
+                                        $est = new Estatus ('','');
+                                        $estatus = $est->buscarTodos();
+                                        for ($i=0; $i < count($estatus); $i++) { 
+                                                echo '<option value="'.$estatus[$i]['id_estatus'].'">'.$estatus[$i]['descripcion'].'</option>';
+                                            }    
+                                        echo '    
                                         </select>
-                                        <button type="input" class="btn pull-right">
-                                            Cancelar
-                                        </button>									
-                                        <button type="submit" class="btn btn-primary pull-right">
-                                            Aceptar
-                                        </button>
-
-                                    </form>
+                                        <button type="input" class="btn pull-right cdecidir">Cancelar</button>									
+                                        <button type="submit" id="decidir_'.$punto->getId().'" class="btn btn-primary pull-right decidir">Decidir</button>';?>
+                                    </div>
+                                </div>
+                                 <div <?php echo 'id="exito_'.$punto->getId().'"';?> class="alert alert-success hidden exito">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>Excelente!</strong> Operacion realizada exitosamente
                                 </div>
                             </div>
                         </div>
-                        <div class="span2 opciones">
+                        <div class="well span2 opciones">
+                            <h5>Estatus:</h5>
                             <?php
                             $est = new Estatus($punto->getEstatus(),'');
-                            $est->buscarDescripcion();
+                            $est->buscar();
                             switch ($est->getDescripcion()) {
                                 case 'Ninguno':
-                                    echo '<h5 class="estatus ninguno span2" ><i class="icon-minus"></i> Ninguno</h5>';
+                                    echo '<h5 class="btn span2 disabled" ><i class="icon-minus"></i> Ninguno</h5>';
                                     break;
                                 case 'Aprobado':
-                                    echo '<h5 class="estatus aprobado span2" ><i class="icon-ok icon-white"></i> Aprobado</h5>
+                                    echo '<h5 class="btn btn-success span2 disabled" ><i class="icon-ok icon-white"></i> Aprobado</h5>
 ';
                                     break;
                                 case 'Negado':
-                                    echo '<h5 class="estatus negado span2" ><i class="icon-remove icon-white"></i> Negado</h5>';
+                                    echo '<h5 class="btn btn-danger span2 disabled" ><i class="icon-remove icon-white"></i> Negado</h5>';
                                     break;
                                 case 'Diferido':
-                                    echo '<h5 class="estatus diferido span2" ><i class="icon-share-alt icon-white"></i> Diferido</h5>';
+                                    echo '<h5 class="btn btn-info span2 disabled" ><i class="icon-share-alt icon-white"></i> Diferido</h5>';
                                     break;
                                 case 'Informado':
-                                    echo '<h5 class="estatus informado span2" ><i class="icon-info-sign icon-white"></i> Informado</h5>';
+                                    echo '<h5 class="btn btn-warning span2 disabled" ><i class="icon-info-sign icon-white"></i> Informado</h5>';
                                     break;
                                 case 'Otro':
-                                    echo '<h5 class="estatus otro span2" ><i class=" icon-asterisk icon-white"></i> Otro</h5>';
+                                    echo '<h5 class="btn btn-inverse span2 disabled" ><i class=" icon-asterisk icon-white"></i> Otro</h5>';
                                     break;
                                 default:
                                     break;
                             }   
-                            echo '<div id="opcionesP_'.$idPuntos[$k]['id_punto'].'" class="well span2" style="margin-top:10%; margin-left:12%">
-                                        <h6> Opciones: </h6>                                
-                                        <a class="btn span2" data-toggle="modal" href="punto.php" data-target="#punto"> Ver detalle</a>                                
-                                        <a id="b_observacion_'.$idPuntos[$k]['id_punto'].'" class="b_observacion btn span2">Agregar Observaci&oacute;n</a>
-                                        <a id="b_decision_'.$idPuntos[$k]['id_punto'].'" class="b_decision btn btn-primary span2" data-toggle="modal" href="punto.php">Tomar decisi&oacute;n</a>
-                                        <a id="b_editar_'.$idPuntos[$k]['id_punto'].'" class="btn btn-primary span2" data-toggle="modal" href="punto.php">Editar punto</a>
+                            echo '<br/><br/><div id="opcionesP_'.$idPuntos[$k]['id_punto'].'" style="margin-top:10%;">
+                                        
+                                        <h6> Opciones: </h6>                                                              
+                                        <a id="b_observacion_'.$idPuntos[$k]['id_punto'].'" class="b_observacion btn span2">Comentar</a>
+                                        <input type="button" id="b_decision_'.$idPuntos[$k]['id_punto'].'" class="b_decision btn btn-info span2" value="Decidir"/>
+                                        <a id="b_editar_'.$idPuntos[$k]['id_punto'].'" class="btn btn-primary span2">Editar</a>
                                 </div>';
                             ?>
                         </div>

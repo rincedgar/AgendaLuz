@@ -27,7 +27,7 @@ class CamposPunto extends Conexion{
     public function buscar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("SELECT * FROM campos_punto WHERE id_punto = '".$this->punto."'");
+            $exec = $this->conexion->prepare("SELECT id_campo, contenido FROM campos_punto WHERE id_punto = '".$this->punto."'");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;

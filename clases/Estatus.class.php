@@ -23,7 +23,7 @@ class Estatus extends Conexion {
         }
     } 
 
-    public function buscarDescripcion() {
+    public function buscar() {
            try {
             
             $this->getConexion();

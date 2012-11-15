@@ -17,8 +17,8 @@ $solicitudes = $sol->buscarTodos();
 </div>
 <div class="modal-body" id="asunto" min-height="300px">
     <div class="row span8">
-        <form id="form" class="form-horizontal ">
-                <div class="control-group">
+        <form id="f_crear_punto" class="form-horizontal ">
+                <div class="control-group" id="div_tipo_solicitud"><!--CARGA DE TIPOS DE SOLICITUD-->
                     <label class="control-label" ><b>Tipo de Solicitud:</b></label>
                     <div class="controls">
                         <select id="sel_solicitud" name="sel_solicitud" class="chzn-select span4">
@@ -40,11 +40,11 @@ $solicitudes = $sol->buscarTodos();
                 <input class='hidden' id='subasunto' name='subasunto' value=<?php echo $_GET['sub'];?>></input>
             
 
-                <!--CARGA DE TIPOS DE SOLICITUD-->
+                
                 <div class="control-group" id="resul_solicitud">
                     <label class="control-label" >Descripción:</label>
                     <div class="controls" id="aread">
-                        <textarea class="textarea span5" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="height: 200px"></textarea>
+                        <textarea class="textarea span5 campo" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="height: 200px"></textarea>
                     </div>         
                 </div> 
 
@@ -63,6 +63,10 @@ $solicitudes = $sol->buscarTodos();
                 <button type="button" class="close" data-dismiss="alert">×</button>
                 <strong>Ops!</strong> Ha ocurrido un problema al agregar el punto
             </div>
+            <div id="vacioPunto" class="alert alert-error hidden">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>Ops!</strong> Verifique que todos los datos esten llenos
+            </div>
             <div id="exitoPunto" class="alert alert-success hidden">
                 <button type="button" class="close" data-dismiss="alert">×</button>
                <strong>Excelente!</strong> El punto agregado exitosamente
@@ -72,5 +76,5 @@ $solicitudes = $sol->buscarTodos();
 </div>
 <div class="modal-footer">    
     <button  class="btn btn-large btn-primary" id="guardarPunto" name="guardarPunto">Guardar</button>
-    <button id="salirModal" class="btn" >Salir</botton>
+    <button id="salirModal" class="btn" >Salir</button>
 </div>

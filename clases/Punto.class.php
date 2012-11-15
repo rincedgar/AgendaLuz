@@ -38,8 +38,7 @@ class Punto extends Conexion {
             $this->getConexion();
             $consul = "SELECT *
             FROM punto
-            WHERE id_punto = $this->id
-            ";
+            WHERE id_punto = '".$this->id."' order by id_punto";
             $exec = $this->conexion->prepare($consul);
             $exec->execute();
 
@@ -69,6 +68,17 @@ class Punto extends Conexion {
             echo "Error en la Consulta:" . $e->getMessage();
         }
     }
+
+    public function decidir() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("UPDATE punto SET id_estatus = '".$this->estatus."' WHERE id_punto='".$this->id."';");
+            $exec->execute();
+            echo "Agenda actualizada exitosamente";
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }    
 
     public function getId() {
         return $this->id;

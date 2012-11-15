@@ -6,7 +6,7 @@ include ('../clases/CampoSolicitud.class.php');
 if($_POST['tipo_solicitud']=='otro'){
 	echo'<label class="control-label" >Descripcion:</label>
             <div class="controls" id="aread">
-                <textarea class="textarea span5" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="height: 200px"></textarea>
+                <textarea class="textarea span5 campo" id="desc_punto" name="desc_punto" placeholder="Escriba la descripción del punto ..." style="height: 200px"></textarea>
             </div>';
 }
 else{
@@ -19,7 +19,7 @@ else{
 		echo'<div class="control-group">
 				<label class="control-label" >'.$campo->getDescripcion().':</label>
 				<div class="controls offset1" id="aread">
-					 <input class="span3" type="text" name="campo_'.$campo->getId().'"/>
+					 <input class="span3 campo" type="text" name="campo_'.$campo->getId().'"/>
 				</div>
 			</div>';
 	}

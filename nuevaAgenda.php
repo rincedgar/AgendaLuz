@@ -38,7 +38,7 @@ echo $hoy['mday'] . '-' . $hoy['mon'] . '-' . $hoy['year'];
     </div>
     <div id="errorFecha" class="alert alert-error hidden">
         <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>Ops!</strong> Debe seleccionar una fecha mayor al dia de hoy.
+        <strong>Ups!</strong> Debe seleccionar una fecha mayor al dia de hoy.
     </div>
     <div hidden="hidden" id="oculto">
         <div class="control-group offset1" >
@@ -82,13 +82,13 @@ echo $hoy['mday'] . '-' . $hoy['mon'] . '-' . $hoy['year'];
                     $asun = new Asunto('', '');
                     $asuntos = $asun->buscarTodos();
                     echo '<select id="sel_asuntos" class="chzn-select span3" name="sel_asuntos">';
-                    echo'<option value=0>Seleccione</option>';
+                    echo'<option value="0">Seleccione</option>';
                     for ($i = 0; $i < count($asuntos); $i++) {
-                        echo "<optgroup label={$asuntos[$i]['descripcion']}>";
+                        echo '<optgroup label="'.$asuntos[$i]['descripcion'].'">';
                         $idSubasuntos = $asun->obtenerSubasuntos($asuntos[$i]['id_asunto']); //subasuntos que estan dentro de este asunto
                         for ($j = 0; $j < count($idSubasuntos); $j++) {
                             $subasunto = new Subasunto($idSubasuntos[$j]['id_subasunto']);
-                            echo'<option value=' . $subasunto->getId() . '>' . $subasunto->obtenerDescripcion() . '</option>';
+                            echo'<option value="' . $subasunto->getId() . '">' . $subasunto->obtenerDescripcion() . '</option>';
                         }
                         echo "</optgroup>";
                     }echo "</select>";
