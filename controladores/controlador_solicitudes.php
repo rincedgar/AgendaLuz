@@ -19,7 +19,7 @@ else{
 		echo'<div class="control-group">
 				<label class="control-label" >'.$campo->getDescripcion().':</label>
 				<div class="controls offset1" id="aread">
-					 <input class="span3 campo" type="text" name="campo_'.$campo->getId().'"/>
+					 <input class="span4 campo" type="text" name="campo_'.$campo->getId().'"/>
 				</div>
 			</div>';
 	}

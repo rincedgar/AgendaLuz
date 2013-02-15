@@ -35,6 +35,6 @@ $idSubasunto = $_GET['sub'];
     </div>   
 </div>
 <div class="modal-footer">    
-    <button  class="btn btn-large btn-primary" id="editarPunto" name="editarPunto">Editar</button>
     <button id="salirModal" class="btn" >Salir</button>
+    <button  class="btn btn-large btn-primary" id="editarPunto" name="editarPunto">Editar</button>
 </div>

@@ -13,49 +13,53 @@ include ('../clases/CamposPunto.class.php');
 include ('../clases/CampoSolicitud.class.php');
 $opcion = $_POST['operacion'];
 session_start();
-//POST: opeacion, dia, dependencia, sel_dependencia, sel_tipo, sel_[roles], sel_asuntos
+//POST: opeacion, dia, dependencia, sel_dependencia, sel_tipo, sel_sesion, sel_[roles], sel_asuntos
 
 switch ($opcion) {
  //**********************************************************************************************************SELECTS DEPENDIENTES	
     case '1':
 		$pertenecen = new Pertenencia ($_POST['dependencia'],'');
-		$idConsejeros = $pertenecen->buscarConsejeros();
+		$idConsejeros = $pertenecen->buscarConsejeros(date('Y\-m\-d'));
         $rol = new Rol('','');
         $idRoles = $rol->buscarTodos();
 		echo '<div class="control-group" >
             <legend><strong>Participantes</strong></legend>';
-        for ($i=0; $i < count($idRoles); $i++) {  
-            $rol->setId($idRoles[$i]['id_rol']);
-            $rol->buscar();
+        for ($i=0; $i < count($idRoles); $i++) { 
+            if($idRoles[$i]['id_rol']<='4'){
+                $rol->setId($idRoles[$i]['id_rol']);
+                $rol->buscar();
+                
+                echo '<div class="control-group offset1" >
+                <label class="control-label" ><b>'.$rol->getDescripcion().'</b>: </label>
+                <div class="controls">';
+                if($rol->getDescripcion() == 'Consejero')
+                    echo '<select id="sel_consejeros" class="chzn-select span3" name="sel_Consejero[]" multiple data-placeholder="Seleccione los consejeros">';
+                else
+                    echo '<select id="sel_'.$rol->getDescripcion().'" class="chzn-select span3" name="sel_'.$rol->getDescripcion().'">
+                    <option value=0>Seleccione</option>';
 
-            
-            echo '<div class="control-group offset1" >
-            <label class="control-label" ><b>'.$rol->getDescripcion().'</b>: </label>
-            <div class="controls">';
-            if($rol->getDescripcion() == 'Consejero')
-                echo '<select id="sel_consejeros" class="chzn-select span3" name="sel_Consejero[]" multiple data-placeholder="Seleccione los consejeros">';
-            else
-                echo '<select id="sel_'.$rol->getDescripcion().'" class="chzn-select span3" name="sel_'.$rol->getDescripcion().'">
-                <option value=0>Seleccione</option>';
-
-            for ($j = 0; $j < count($idConsejeros); $j++) {
-                $consejero = new Consejero($idConsejeros[$j]['id_consejero'],'','','','');
-                $consejero->buscar();
-                echo '<option value='.$rol->getId().'_'.$consejero->getId().'>'.$consejero->getApellido().', '.$consejero->getNombre().'</option>';
-            } 
-            echo "</select>";
-            if($rol->getDescripcion() == 'Consejero')
-                echo '<br/><span class="help-block small">Seleccione todos los consejeros que participaran</span>';  
-            echo "</div></div>";    
+                for ($j = 0; $j < count($idConsejeros); $j++) {
+                    $consejero = new Consejero($idConsejeros[$j]['id_consejero'],'','','','');
+                    $consejero->buscar();
+                    echo '<option value='.$rol->getId().'_'.$consejero->getId().'>'.$consejero->getApellido().', '.$consejero->getNombre().'</option>';
+                } 
+                echo "</select>";
+                if($rol->getDescripcion() == 'Consejero')
+                    echo '<br/><span class="help-block small">Seleccione todos los consejeros que participarán</span>';  
+                echo "</div></div>";  
+            }  
         }
 		
 		break;
 
  //**********************************************************************************************************GUARDAR AGENDA
 	case '2':      
-        if(($_POST['dia']!='')&&($_POST['sel_dependencia']!='')&&($_POST['sel_tipo']!='')&&(isset($_SESSION['puntos']))){
-            
-            $agenda = new Agenda('',$_POST['dia']);
+        if(($_POST['dia']!='')&&($_POST['sel_dependencia']!='')&&($_POST['sel_tipo']!='')&&(isset($_SESSION['puntos'][0]))){
+            if($_POST['sel_sesion']=='0')
+                $extra = 'FALSE';
+            else
+                $extra = 'TRUE';
+            $agenda = new Agenda('',$_POST['dia'],'',$extra,'','',1);
             $idAgenda = $agenda->insertar();
             $tipoAgenda = new tipoAgenda($idAgenda,$_POST['sel_dependencia'],$_POST['sel_tipo']);
             $tipoAgenda->insertar();

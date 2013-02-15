@@ -24,6 +24,7 @@ include ('menuIzquierda.php');
                 <option value="0">Seleccione</option>
                 <option value="1">Identificador</option>
                 <option value="2">Fecha</option>
+                <option value="3">Dependencia</option>
             </select>
         </div>
     </div>

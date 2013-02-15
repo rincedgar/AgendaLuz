@@ -8,19 +8,24 @@
 require_once ('Conexion.class.php');
 
 class Consejero extends Conexion {
-    const SELECT_ALL_SQL = "SELECT * FROM consejeros";
     protected $id;
-    protected $nombre = "";
-    protected $apellido = "";
-    protected $desde = null;
-    protected $hasta = null;
+    protected $nombre;
+    protected $apellido;
+    protected $desde;
+    protected $hasta;
+    protected $email;
+    protected $permiso;
+    protected $imagen;
 
-    function __construct($id="",$nombre="", $apellido="", $desde="", $hasta="") {
+    function __construct($id="",$nombre="", $apellido="", $desde="", $hasta="",$email="",$permiso="",$imagen="") {
         $this->id=$id;
         $this->nombre = $nombre;
         $this->apellido = $apellido;
         $this->desde = $desde;
         $this->hasta = $hasta;
+        $this->email = $email;
+        $this->permiso = $permiso;
+        $this->imagen = $imagen;
     }
 
     public function __destruct() {
@@ -43,6 +48,9 @@ class Consejero extends Conexion {
                 $this->apellido=$consulta[0]['apellido'];
                 $this->desde=$consulta[0]['desde'];
                 $this->hasta=$consulta[0]['hasta'];
+                $this->email=$consulta[0]['email'];
+                $this->permiso=$consulta[0]['id_permiso'];
+                $this->imagen=$consulta[0]['imagen'];
             }
         } catch (PDOException $e) {
             echo "Error de conexión:" . $e->getMessage();
@@ -55,7 +63,7 @@ class Consejero extends Conexion {
             if (!$this->getConexion())
                 return 0;
             else {
-                $consul= "SELECT * FROM consejeros";
+                $consul= "SELECT id_consejero FROM consejeros";
                 $exec = $this->conexion->prepare($consul);
                 $exec->execute();
                 $consulta = $exec->fetchAll();
@@ -68,21 +76,10 @@ class Consejero extends Conexion {
     
     public function insertar() {
         try {
-
-            if (!$this->getConexion())
-                return 0;
-            else {
-                //  $a="INSERT INTO consejeros (nombre,apellido,desde,hasta) VALUES('".$this->nombre."','".$this->apellido."','".$this->desde."','".$this->hasta."')RETURNING id_consejero;";
-                // echo $a;
-                $exec = $this->conexion->prepare("INSERT INTO consejeros (nombre,apellido,desde,hasta) VALUES('" . $this->nombre . "','" . $this->apellido . "','" . $this->desde . "','" . $this->hasta . "')RETURNING id_consejero;");
-
-                // $exec= $this->conexion->prepare('INSERT INTO consejeros (nombre,apellido,desde,hasta) values("' . $this->nombre . '","' . $this->apellido . '",' . $this->desde . ',' . $this->hasta . ')RETURNING id_consejero;');
-                //$parametros = array($this->nombre, $this->apellido, $this->desde, $this->hasta);
-                //$consulta = $this->conexion->execute($sql, $parametros);
-                $exec->execute();
-                $consulta = $exec->fetchAll();
-                return $consulta;
-            }
+            $exec = $this->conexion->prepare("INSERT INTO consejeros (nombre,apellido,desde,hasta,email,id_permiso,imagen) VALUES('".$this->nombre."','".$this->apellido."','".$this->desde."','".$this->hasta."','".$this->email."','".$this->permiso."','".$this->imagen."')RETURNING id_consejero;");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            return $consulta;
         } catch (PDOException $e) {
             echo "Error de conexión:" . $e->getMessage();
         }
@@ -99,10 +96,31 @@ class Consejero extends Conexion {
         }
     }
 
+    public function cambiarImagen() {
+            try {
+                $this->getConexion();
+                $exec = $this->conexion->prepare("UPDATE consejeros SET imagen = '".$this->imagen."' WHERE id_consejero='".$this->id."';");
+                $exec->execute();
+                echo "Consejero actualizado exitosamente";
+            } catch (PDOException $e) {
+                echo "Error en la Consulta:" . $e->getMessage();
+            }
+    }
+
+     public function nuevoPeriodo() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("UPDATE consejeros SET desde='".$this->desde."', hasta='".$this->hasta."' WHERE id_consejero='".$this->id."';");
+            $exec->execute();
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
+
     public function eliminar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("DELETE FROM consejeros WHERE id_consejero = " . $this->id . "");
+            $exec = $this->conexion->prepare("DELETE FROM consejeros WHERE id_consejero = '".$this->id."'");
             $exec->execute();
             echo "Consejero eliminado exitosamente";
         } catch (PDOException $e) {
@@ -110,17 +128,13 @@ class Consejero extends Conexion {
         }
     }
 
-    public function proximasAgendas($usuario) {
+    public function proximasAgendas() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("select a.id_agenda, a.fecha, d.id_dependencia, d.descripcion as dependencia, tc.id_tipo_consejo, tc.descripcion,tc.siglas, EXTRACT(YEAR FROM a.fecha) as anio from participantes p
+            $exec = $this->conexion->prepare("select a.id_agenda  from participantes p
 join agenda a on a.id_agenda=p.id_agenda 
-join tipo_agenda ta on ta.id_agenda=a.id_agenda
-join tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo
-join dependencias d on d.id_dependencia=ta.id_dependencia
-where a.fecha >=current_date AND p.id_consejero='".$usuario."' 
-group by a.id_agenda, a.fecha, d.descripcion, tc.descripcion, tc.siglas,d.id_dependencia,tc.id_tipo_consejo
-order by a.fecha limit 5");
+where a.fecha >=current_date AND p.id_consejero='".$this->id."' 
+group by a.id_agenda order by a.fecha limit 5");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -129,17 +143,31 @@ order by a.fecha limit 5");
         }
     }
     
-    public function agendasAnteriores($usuario) {
+    public function agendasActivas() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("select a.id_agenda, a.fecha, d.id_dependencia, d.descripcion as dependencia, tc.id_tipo_consejo, tc.descripcion,tc.siglas, EXTRACT(YEAR FROM a.fecha) as anio from participantes p
+            $exec = $this->conexion->prepare("select a.id_agenda  from participantes p
+join agenda a on a.id_agenda=p.id_agenda 
+where a.en_sesion IS TRUE AND p.id_consejero='".$this->id."' 
+group by a.id_agenda order by a.fecha limit 5");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            return $consulta;
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
+
+    public function agendasAnteriores() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("select a.id_agenda from participantes p
 join agenda a on a.id_agenda=p.id_agenda 
 join tipo_agenda ta on ta.id_agenda=a.id_agenda
 join tipo_consejo tc on tc.id_tipo_consejo=ta.id_tipo_consejo
 join dependencias d on d.id_dependencia=ta.id_dependencia
-where a.fecha <=current_date AND p.id_consejero='".$usuario."'
-group by a.id_agenda, a.fecha, d.descripcion, tc.descripcion, tc.siglas,d.id_dependencia,tc.id_tipo_consejo
-order by a.fecha limit 5");
+where a.fecha <=current_date AND p.id_consejero='".$this->id."'
+group by a.id_agenda order by a.fecha limit 5");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -190,6 +218,18 @@ order by a.fecha limit 5");
         return $this->hasta;
     }
 
+    public function getEmail() {
+        return $this->email;
+    }
+
+     public function getPermiso() {
+        return $this->permiso;
+    }
+    
+     public function getimagen() {
+        return $this->imagen;
+    }
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -210,6 +250,17 @@ order by a.fecha limit 5");
         $this->hasta = $hasta;
     }
 
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    public function setPermiso($permiso) {
+        $this->permiso = $permiso;
+    }
+
+    public function setImagen($imagen) {
+        $this->imagen = $imagen;
+    }
 }
 
 ?>

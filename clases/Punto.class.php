@@ -16,8 +16,9 @@ class Punto extends Conexion {
     protected $solicitud;
     protected $detalle;
     protected $otro;
+    protected $decision;
 
-    function __construct($id='',$agenda='',$estatus="",$subasunto="",$solicitud='',$detalle='',$otro='') {
+    function __construct($id='',$agenda='',$estatus="",$subasunto="",$solicitud='',$detalle='',$otro='',$decision='') {
         $this->id=$id;
         $this->agenda=$agenda;
         $this->estatus=$estatus;
@@ -25,6 +26,7 @@ class Punto extends Conexion {
         $this->solicitud=$solicitud;
         $this->detalle=$detalle;
         $this->otro=$otro;
+        $this->decision=$decision;
     }
 
     public function __destruct() {
@@ -49,6 +51,7 @@ class Punto extends Conexion {
             $this->solicitud=$consulta[0]['id_tipo_solicitud'];
             $this->detalle=$consulta[0]['detalle'];
             $this->otro=$consulta[0]['otro'];
+            $this->otro=$consulta[0]['decision'];
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }
@@ -80,6 +83,16 @@ class Punto extends Conexion {
         }
     }    
 
+    public function decision() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("UPDATE punto SET decision = '".$this->decision."' WHERE id_punto='".$this->id."';");
+            $exec->execute();
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
+
     public function getId() {
         return $this->id;
     }
@@ -103,6 +116,11 @@ class Punto extends Conexion {
     public function getDetalle() {
         return $this->detalle;
     }
+
+    public function getDecision() {
+        return $this->decision;
+    }
+
      public function setId($id) {
         $this->id = $id;
     }
@@ -133,6 +151,10 @@ class Punto extends Conexion {
 
     public function setOtro($otro) {
         $this->otro = $otro;
+    }
+
+    public function setDecision($decision) {
+        $this->otro = $decision;
     }
 }
 

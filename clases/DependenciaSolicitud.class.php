@@ -1,23 +1,21 @@
-    <?php
+<?php
 
 
 /**
- * Description of campos_solicitud
+ * Description of dependencia_solicitudes
  *
  * @author Edgar Rincon
  */
-require_once ('Conexion.class.php');
+class DependenciaSolicitud extends Conexion {
 
-class CampoSolicitud extends Conexion{
+    protected $dependencia;
+    protected $solicitud;
 
-    protected $tipo_solicitud;
-    protected $campo;
-
-    function __construct($solicitud='', $campo='') {
-        $this->tipo_solicitud = $solicitud;
-        $this->campo = $campo;
+    function __construct($depe, $soli) {
+        $this->dependencia = $depe;
+        $this->solicitud = $soli;
     }
-    
+
     public function __destruct() {
         foreach ($this as $key => $value) {
             unset($this->$key);
@@ -27,7 +25,7 @@ class CampoSolicitud extends Conexion{
     public function buscar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT * FROM campos_solicitud');
+            $exec = $this->conexion->prepare('SELECT * FROM dependencia_solicitudes');
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -36,10 +34,10 @@ class CampoSolicitud extends Conexion{
         }
     }
 
-    public function buscarCampos(){
+     public function buscarSolicitudes(){
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("SELECT id_campo FROM campos_solicitud WHERE id_tipo_solicitud ='".$this->tipo_solicitud."'");
+            $exec = $this->conexion->prepare("SELECT id_tipo_solicitud FROM dependencia_solicitudes WHERE id_dependencia ='".$this->dependencia."' ORDER BY id_tipo_solicitud");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -51,7 +49,7 @@ class CampoSolicitud extends Conexion{
     public function insertar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO campos_solicitud (id_tipo_solicitud,id_campo) VALUES('" . $this->tipo_solicitud . "','" . $this->campo. "');");
+            $exec = $this->conexion->prepare("INSERT INTO dependencia_solicitudes (id_dependencia,id_tipo_solicitud) VALUES('" . $this->dependencia . "','" . $this->solicitud . "');");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -60,10 +58,10 @@ class CampoSolicitud extends Conexion{
         }
     }
 
-    public function actualizar($solicitud, $campo) {
+    public function actualizar($depe, $soli) {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("UPDATE campos_solicitud SET id_tipo_solicitud = '" . $solicitud . "',id_campo='" . $campo . "' WHERE id_tipo_solicitud='" . $this->tipo_solicitud . "' AND id_campo='" . $this->campo . "';");
+            $exec = $this->conexion->prepare("UPDATE dependencia_solicitudes SET id_dependencia = '" . $depe . "',id_tipo_solicitud='" . $soli . "' WHERE id_dependencia='" . $this->dependencia . "' AND id_tipo_solicitud='" . $this->solicitud . "';");
             $exec->execute();
             echo "Relacion actualizada exitosamente";
         } catch (PDOException $e) {
@@ -74,7 +72,7 @@ class CampoSolicitud extends Conexion{
     public function eliminar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("DELETE FROM campos_solicitud WHERE id_tipo_solicitud='" . $this->tipo_solicitud . "' AND id_campo='" . $this->campo . "'");
+            $exec = $this->conexion->prepare("DELETE FROM dependencia_solicitudes WHERE id_dependencia='" . $this->dependencia . "' AND id_tipo_solicitud='" . $this->solicitud . "'");
             $exec->execute();
             echo "Relacion eliminada exitosamente";
         } catch (PDOException $e) {
@@ -82,22 +80,21 @@ class CampoSolicitud extends Conexion{
         }
     }
 
-    public function getTipoSolicitud() {
-        return $this->tipo_solicitud;
+     public function getDependencia() {
+        return $this->dependencia;
     }
 
-    public function getCampo() {
-        return $this->campo;
+    public function getSolicitud() {
+        return $this->solicitud;
     }
 
-    public function setTipoSolicitud($solicitud) {
-        $this->tipo_solicitud = $solicitud;
+    public function setDependencia($dependencia) {
+        $this->dependencia = $dependencia;
     }
 
-    public function setCampo($campo) {
-        $this->campo = $campo;
+    public function setSolicitud($solicitud) {
+        $this->solicitud = $solicitud;
     }
-
 }
 
 ?>

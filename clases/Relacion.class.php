@@ -37,7 +37,7 @@ class Relaciones extends Conexion {
     public function insertar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("INSERT INTO relaciones (id_asunto,id_subasunto) VALUES('" . $this->asunto . "','" . $this->subasuntoasunto . "');");
+            $exec = $this->conexion->prepare("INSERT INTO relaciones (id_asunto,id_subasunto) VALUES('" . $this->asunto . "','" . $this->subasunto . "');");
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;

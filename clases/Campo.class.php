@@ -26,7 +26,7 @@ class Campo extends Conexion {
     public function buscarTodos() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT id_campo FROM campos');
+            $exec = $this->conexion->prepare('SELECT id_campo FROM campos ORDER BY id_campo');
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;
@@ -35,7 +35,7 @@ class Campo extends Conexion {
         }
     }
 
-     public function buscar() {
+    public function buscar() {
         try {
             $this->getConexion();
             $exec = $this->conexion->prepare("SELECT descripcion FROM campos WHERE id_campo = '".$this->id."'");
@@ -47,6 +47,17 @@ class Campo extends Conexion {
         }
     }
     
+     public function buscarDescripcion() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("SELECT id_campo FROM campos WHERE descripcion = '".$this->descripcion."'");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            return $consulta;
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
     public function insertar() {
         try {
             $this->getConexion();

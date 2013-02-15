@@ -1,9 +1,11 @@
 <?php   
 include ('./clases/Subasunto.class.php');
+include ('./clases/DependenciaSolicitud.class.php');
 include ('./clases/TipoSolicitud.class.php');
 $idSubasunto = $_GET['sub'];
-$sol = new TipoSolicitud('','');
-$solicitudes = $sol->buscarTodos();
+$depSol = new DependenciaSolicitud($_GET['dep'],'');
+$solicitudes = $depSol->buscarSolicitudes();
+$sol = new TipoSolicitud();
 ?>
 
 <script src="./js/utilidades.js"></script>
@@ -21,9 +23,8 @@ $solicitudes = $sol->buscarTodos();
                 <div class="control-group" id="div_tipo_solicitud"><!--CARGA DE TIPOS DE SOLICITUD-->
                     <label class="control-label" ><b>Tipo de Solicitud:</b></label>
                     <div class="controls">
-                        <select id="sel_solicitud" name="sel_solicitud" class="chzn-select span4">
+                        <select id="sel_solicitud" name="sel_solicitud" class="span4">
                             <?php
-                                echo count($solicitudes);
                                 for ($i=0; $i < count($solicitudes)+1; $i++) { 
                                     if($i==count($solicitudes))
                                         echo '<option value="otro" selected="selected">Otro</option>';
@@ -38,7 +39,6 @@ $solicitudes = $sol->buscarTodos();
                     </div>              
                 </div>
                 <input class='hidden' id='subasunto' name='subasunto' value=<?php echo $_GET['sub'];?>></input>
-            
 
                 
                 <div class="control-group" id="resul_solicitud">
@@ -58,7 +58,7 @@ $solicitudes = $sol->buscarTodos();
                     <input type="button" class="btn btn-primary" id="regreso" value="Volver"/>               
                 </div>
         </form>
-        <div class=" row span5">    
+        <div class=" row span7">    
             <div id="errorPunto" class="alert alert-error hidden">
                 <button type="button" class="close" data-dismiss="alert">×</button>
                 <strong>Ops!</strong> Ha ocurrido un problema al agregar el punto
@@ -69,12 +69,12 @@ $solicitudes = $sol->buscarTodos();
             </div>
             <div id="exitoPunto" class="alert alert-success hidden">
                 <button type="button" class="close" data-dismiss="alert">×</button>
-               <strong>Excelente!</strong> El punto agregado exitosamente
+               <strong>Excelente!</strong> El punto se ha agregado exitosamente
             </div>
         </div>
     </div>   
 </div>
 <div class="modal-footer">    
-    <button  class="btn btn-large btn-primary" id="guardarPunto" name="guardarPunto">Guardar</button>
     <button id="salirModal" class="btn" >Salir</button>
+    <button  class="btn btn-large btn-primary" id="guardarPunto" name="guardarPunto">Guardar</button>
 </div>

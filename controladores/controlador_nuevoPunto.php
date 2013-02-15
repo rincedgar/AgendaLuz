@@ -11,7 +11,19 @@
 	$operacion = (!isset($_POST['operacion'])?0:$_POST['operacion']);
 	$solicitud = (!isset($_POST['sel_solicitud'])?0:$_POST['sel_solicitud']);
 	
-		
+
+function truncar($string, $limit, $break=' ', $pad='...') {
+// return with no change if string is shorter than $limit
+	if(strlen($string) <= $limit)
+		return $string;
+	// is $break present between $limit and the end of the string?
+	if(false !== ($breakpoint = strpos($string, $break, $limit))) {
+		if($breakpoint < (strlen($string)-1)) {
+		$string = substr($string, 0, $breakpoint).$pad;
+		}
+	}
+	return $string;
+}
 
 		switch ($operacion) {
 			case '1':
@@ -136,15 +148,15 @@
 					
 					$existe = array_search($_SESSION['puntos'][$i]['id'], $sub);
 					$valor =(!isset($npuntos[$existe])?0:$npuntos[$existe]);
-					$subasunto->setId($_SESSION['puntos'][$i]['id']);
-
+					$subasunto->setId($_SESSION['puntos'][$i]['id']);					
 					echo'<tr>';
 					echo '<td ';
 					if($inicio==1){
 						echo '  background-color:#CEE3F6" rowspan="'.$_SESSION['npuntos'][$existe].'" class="span2">'.$subasunto->obtenerDescripcion().'</td><td';
 					}
 					if (isset($_SESSION['puntos'][$i]['descripcion'])){
-					 	echo '>'.$_SESSION['puntos'][$i]['descripcion'].'</td>';
+						$truncado=truncar($_SESSION['puntos'][$i]['descripcion'],150);
+					 	echo '>'.$truncado.'</td>';
 					} 
 					else{
 						$solicitud = new TipoSolicitud($_SESSION['puntos'][$i]['id_tipo_solicitud'],'');

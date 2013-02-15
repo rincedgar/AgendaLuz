@@ -12,7 +12,7 @@ class Dependencias extends Conexion {
     protected $id;
     protected $descripcion;
 
-    function __construct($id,$desc) {
+    function __construct($id='',$desc='') {
         $this->id=$id;
         $this->descripcion = $desc;
     }
@@ -26,7 +26,19 @@ class Dependencias extends Conexion {
     public function buscar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare('SELECT * FROM dependencias');
+            $exec = $this->conexion->prepare("SELECT descripcion FROM dependencias WHERE id_dependencia ='".$this->id."'");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            $this->descripcion=$consulta[0]['descripcion'];
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
+
+    public function buscarTodos() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare('SELECT id_dependencia FROM dependencias');
             $exec->execute();
             $consulta = $exec->fetchAll();
             return $consulta;

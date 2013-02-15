@@ -25,12 +25,12 @@ class Participantes extends Conexion{
         }
     } 
     
-    public function buscar($idAgenda) {
+    public function buscar() {
         try {
             $this->getConexion();
             $consul = "SELECT *
             FROM participantes
-            WHERE id_agenda = $idAgenda
+            WHERE id_agenda = '".$this->agenda."'
             ";
             $exec = $this->conexion->prepare($consul);
             $exec->execute();
@@ -56,7 +56,7 @@ class Participantes extends Conexion{
     public function actualizar() {
         try {
             $this->getConexion();
-            $exec = $this->conexion->prepare("UPDATE participantes SET id_consejero='" . $this->consejero . "', id_rol='" . $this->rol . "'WHERE id_agenda='" . $this->agenda . "';");
+            $exec = $this->conexion->prepare("UPDATE participantes SET id_consejero='".$this->consejero."' WHERE id_agenda='".$this->agenda ."' AND id_rol='".$this->rol."'");
             $exec->execute();
             echo "Participante actualizado exitosamente";
         } catch (PDOException $e) {
@@ -70,6 +70,18 @@ class Participantes extends Conexion{
             $exec = $this->conexion->prepare("DELETE FROM participantes WHERE id_agenda = " . $this->agenda . "");
             $exec->execute();
             echo "Asunto eliminado exitosamente";
+        } catch (PDOException $e) {
+            echo "Error en la Consulta:" . $e->getMessage();
+        }
+    }
+
+     public function obtenerRol() {
+        try {
+            $this->getConexion();
+            $exec = $this->conexion->prepare("SELECT id_rol FROM participantes WHERE id_agenda = '".$this->agenda."' AND id_consejero = '".$this->consejero."';");
+            $exec->execute();
+            $consulta = $exec->fetchAll();
+            return $consulta;
         } catch (PDOException $e) {
             echo "Error en la Consulta:" . $e->getMessage();
         }

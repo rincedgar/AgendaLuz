@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    $_SESSION['usuario'] = 1;   
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -22,7 +27,7 @@
         <script src="./js/bootstrap.js"></script>
         <script src="./js/chosen.jquery.js"></script>
         <script src="./js/jquery.colorbox.js"></script>
-        
+        <script src="./js/jquery.upload.js"></script>
         
     </head>
 
@@ -45,14 +50,15 @@
                 <div class="row span12 hidden-desktop" style=" margin-top: 100px"></div>
                 <div class="container">
                     <div class="row hidden-phone">
-                        <div class="span3" id="logo"><img src="./img/logo_luz.png" width="90" height="105" alt="Logo LUZ">
+                        <div class="span3" id="logo">
+                            <img src="./img/logo_luz.png" width="90" height="105" alt="Logo LUZ">
                         </div>
-
                         <div class="span6">
                             <h2 style="color:#00539F">Sistema de Agendas</h2>
                             <h2 style="color:#00539F">Facultad Experimental de Ciencias</h2>
                         </div>
-                        <div class="span3 hidden-phone"><img src="./img/logo_fec.png" width="100" height="100" alt="Logo FEC">
+                        <div class="span3 hidden-phone">
+                            <img src="./img/logo_fec.png" width="100" height="100" alt="Logo FEC">
                         </div>
                     </div>
                     <div class="progress span12 hidden-phone" style="margin-left: 0">
@@ -82,10 +88,9 @@
             </header>
             <!-- Menu Horizontal ================================================== -->
             <div id="menuh" class="navbar-inner">
-                <h4 class="pull-left text-info">Bienvenido Sr. Edgar Rincon</h4>
-                <form class="navbar-search pull-right">
-                    <input type="text" class="search-query" placeholder="Buscar">
-                </form>
-
-            </div> <br/>
+                <h4 class="pull-left">Bienvenido Sr. Edgar Rincon</h4>
+                <?php
+                setlocale(LC_ALL,"esp");
+                echo '<h4 class="pull-right hidden-phone">Maracaibo, '.utf8_encode(strftime("%A %d de %B del %Y")).'</h4>';?>
+            </div><br/>
             
